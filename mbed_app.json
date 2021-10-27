@@ -1,0 +1,11 @@
+{
+    "target_overrides": {
+        "*": {
+            "platform.stdio-baud-rate"                  : 115200,
+            "platform.stdio-convert-newlines"           : true,
+            "target.usb-uart"                           : "UART_1",
+            "target.usb-uart-tx"                        : "PB_3",
+            "target.usb-uart-rx"                        : "PB_2"
+        }
+    }
+}
