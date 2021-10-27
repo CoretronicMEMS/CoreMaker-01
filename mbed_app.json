@@ -1,8 +1,15 @@
 {
     "target_overrides": {
-        "*": {
+        "*":{
             "platform.stdio-baud-rate"                  : 115200,
-            "platform.stdio-convert-newlines"           : true,
+            "platform.stdio-convert-newlines"           : true
+        },
+        "NUMAKER_IOT_M487": {
+            "target.usb-uart"                           : "UART_0",
+            "target.usb-uart-tx"                        : "PB_13",
+            "target.usb-uart-rx"                        : "PB_12"
+        },
+        "NUMAKER_PFM_M487": {
             "target.usb-uart"                           : "UART_1",
             "target.usb-uart-tx"                        : "PB_3",
             "target.usb-uart-rx"                        : "PB_2"
