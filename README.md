@@ -24,7 +24,56 @@
 git clone --recurse-submodules <repo url>
 ```
 
-## Build
+## Build project
+
+### Configure and build in a single step
 ```
 mbed-tools compile -m NUMAKER_IOT_M487 -t GCC_ARM
 ```
+
+### Build the project with CMake (advanced)
+
+```
+mbed-tools configure -m NUMAKER_IOT_M487 -t GCC_ARM
+cmake -S . -B cmake_build/NUMAKER_IOT_M487/develop/GCC_ARM -GNinja
+cmake --build ./cmake_build/NUMAKER_IOT_M487/develop/GCC_ARM
+```
+
+## Recommend editor
+
+### VSCode
+   https://code.visualstudio.com/
+   #### Extensions
+   * C/C++
+   * CMake
+
+   #### VSCode configuration
+
+   ##### tasks.json
+   ```
+   "tasks": [
+      {
+         "type": "shell",
+         "label": "CMake Build",
+         "command": "cmake.exe",
+         "args": [
+               "--build",
+               "cmake_build/NUMAKER_IOT_M487/develop/GCC_ARM/"
+         ],
+         "problemMatcher": [
+               "$gcc"
+         ],
+         "group": {
+               "kind": "build",
+               "isDefault": true
+         },
+         "detail": "編譯器: cmake"
+      }
+   ]
+   ```
+   ##### settings.json
+   ```
+   "cmake.generator": "Ninja",
+   "cmake.buildDirectory": "${workspaceFolder}/cmake_build/NUMAKER_IOT_M487/develop/GCC_ARM",
+   ```
+
