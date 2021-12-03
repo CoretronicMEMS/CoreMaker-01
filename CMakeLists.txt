@@ -23,18 +23,18 @@ include(${MBED_CONFIG_PATH}/mbed_config.cmake)
 target_include_directories(${APP_TARGET}
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/
-        ${CMAKE_CURRENT_SOURCE_DIR}/nvt_rs485/
-        ${CMAKE_CURRENT_SOURCE_DIR}/sensors/
 )
 
 target_sources(${APP_TARGET}
     PRIVATE
         main.cpp
-        sensors/ADS131E.cpp
-        sensors/SensorHub.cpp
 )
 
-target_link_libraries(${APP_TARGET} mbed-os)
+target_link_libraries(${APP_TARGET}
+    PRIVATE
+        mbed-os
+        mbed-netsocket
+)
 
 mbed_set_post_build(${APP_TARGET})
 

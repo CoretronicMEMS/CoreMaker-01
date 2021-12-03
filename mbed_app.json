@@ -1,20 +1,32 @@
 {
     "target_overrides": {
-        "*":{
-            "platform.stdio-baud-rate"                  : 115200,
-            "platform.stdio-convert-newlines"           : true,
-            "target.device_has_remove"                  : ["RTC"],
-            "target.lxt-present"                        : false
+        "*": {
+            "platform.stdio-baud-rate": 115200,
+            "platform.stdio-convert-newlines": true,
+            "target.device_has_remove": [
+                "RTC"
+            ],
+            "target.lxt-present": false
         },
         "NUMAKER_IOT_M487": {
-            "target.usb-uart"                           : "UART_0",
-            "target.usb-uart-tx"                        : "PB_13",
-            "target.usb-uart-rx"                        : "PB_12"
+            "target.usb-uart": "UART_0",
+            "target.usb-uart-tx": "PB_13",
+            "target.usb-uart-rx": "PB_12"
         },
         "NUMAKER_PFM_M487": {
-            "target.usb-uart"                           : "UART_1",
-            "target.usb-uart-tx"                        : "PB_3",
-            "target.usb-uart-rx"                        : "PB_2"
+            "target.usb-uart": "UART_1",
+            "target.usb-uart-tx": "PB_3",
+            "target.usb-uart-rx": "PB_2"
+        }
+    },
+    "config": {
+        "wifi-ssid": {
+            "help": "Enter SSID here",
+            "value": "\"437_DIRTY_DLINK\""
+        },
+        "wifi-password": {
+            "help": "Enter PASSWORD here",
+            "value": "\"1111111111\""
         }
     }
 }
