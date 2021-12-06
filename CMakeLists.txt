@@ -31,6 +31,7 @@ target_sources(${APP_TARGET}
     PRIVATE
         main.cpp
         sensors/ADS131E.cpp
+        sensors/AcousticNode.cpp
         sensors/SensorHub.cpp
 )
 

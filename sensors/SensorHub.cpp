@@ -2,11 +2,13 @@
 
 #include "SensorHub.h"
 #include "ADS131E.h"
+#include "AcousticNode.h"
 
 namespace CMC {
 
 SPI spi0(PA_0, PA_1, PA_2, PA_3, mbed::use_gpio_ssel);
 ADS131E ads131e(&spi0, PB_0, PF_4, PF_5, 1000);
+AcousticNode acoustic_node(PB_6, 48000);
 EventFlags sensorEvent("sensorEvent");
 
 int32_t adc_data[6];
@@ -19,7 +21,8 @@ int32_t adc_data[6];
  */
 Sensor* sensors[] =
 {
-    &ads131e
+    &ads131e,
+    &acoustic_node
 };
 
 
@@ -107,6 +110,10 @@ void SensorHub_Task()
         if(flags & SENSOR_EVENT(SENSOR_ADS131E))
         {
             sensors[SENSOR_ADS131E]->Read(&adc_data, sizeof(adc_data));
+        }
+        if(flags & SENSOR_EVENT(SENSOR_ACOUSTIC_NODE))
+        {
+            sensors[SENSOR_ACOUSTIC_NODE]->Read(&adc_data, sizeof(adc_data));
         }
     }
 }

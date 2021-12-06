@@ -29,6 +29,7 @@ namespace CMC {
 enum SensorType
 {
     SENSOR_ADS131E,
+    SENSOR_ACOUSTIC_NODE,
     SENSOR_MAX
 };
 
