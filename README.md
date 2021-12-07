@@ -77,3 +77,9 @@ cmake --build ./cmake_build/NUMAKER_IOT_M487/develop/GCC_ARM
    "cmake.buildDirectory": "${workspaceFolder}/cmake_build/NUMAKER_IOT_M487/develop/GCC_ARM",
    ```
 
+## Install OPL1000 driver on mbed-os
+```
+cp 0001-Add-OPL1000-driver.patch mbed-os/
+cd mbed-os/ && git am 0001-Add-OPL1000-driver.patch
+mbed-tools compile -m NUMAKER_IOT_M487 -t GCC_ARM
+```

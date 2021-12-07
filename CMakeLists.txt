@@ -35,7 +35,11 @@ target_sources(${APP_TARGET}
         sensors/SensorHub.cpp
 )
 
-target_link_libraries(${APP_TARGET} mbed-os)
+target_link_libraries(${APP_TARGET}
+    PRIVATE
+        mbed-os
+        mbed-netsocket
+)
 
 mbed_set_post_build(${APP_TARGET})
 
