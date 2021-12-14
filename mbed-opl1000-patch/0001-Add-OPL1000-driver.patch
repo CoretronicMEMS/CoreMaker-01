@@ -1,7 +1,7 @@
-From 90a1414b385a47144c6a4669679ae9a509e8e319 Mon Sep 17 00:00:00 2001
+From 3da819bf1ef719e253dd08b842802e3cf12375c3 Mon Sep 17 00:00:00 2001
 From: "jeff.cheng" <jeff.cheng@coretronic.com>
 Date: Fri, 3 Dec 2021 15:58:15 +0800
-Subject: [PATCH] Add OPL1000 driver.
+Subject: [PATCH 1/2] Add OPL1000 driver.
 
 ---
  connectivity/drivers/wifi/CMakeLists.txt      |    2 +
