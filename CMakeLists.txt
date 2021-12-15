@@ -25,6 +25,7 @@ target_include_directories(${APP_TARGET}
         ${CMAKE_CURRENT_SOURCE_DIR}/
         ${CMAKE_CURRENT_SOURCE_DIR}/nvt_rs485/
         ${CMAKE_CURRENT_SOURCE_DIR}/sensors/
+        ${CMAKE_CURRENT_SOURCE_DIR}/sensors/BME680
 )
 
 target_sources(${APP_TARGET}
@@ -33,6 +34,8 @@ target_sources(${APP_TARGET}
         sensors/ADS131E.cpp
         sensors/AcousticNode.cpp
         sensors/SensorHub.cpp
+        sensors/BME680/mbed_bme680.cpp
+        sensors/BME680/bme680.cpp
 )
 
 target_link_libraries(${APP_TARGET}
