@@ -4,8 +4,6 @@
 #include "ADS131E.h"
 #include "global.h"
 
-I2C i2c(PA_6, PA_7);
-BME680 bme680(0x76 << 1);
 Thread threadHub;
 
 using namespace CMC;
@@ -22,23 +20,11 @@ int main()
 
     threadHub.start(CMC::SensorHub_Task);
 
-    if (!bme680.begin()) {
-        printf("BME680 Begin failed \r\n");
-        return 1;
-    }
-
-    while(1)
+    while (1)
     {
         ThisThread::sleep_for(chrono::milliseconds(1000));
         printf("%ld, %ld, %ld, %ld, %ld, %ld\n", adc_data[0], adc_data[1], adc_data[2], adc_data[3], adc_data[4], adc_data[5]);
-
-        if (bme680.performReading())
-        {
-            printf("%.2f degC,   ", bme680.getTemperature());
-            printf("%.2f %%,   ", bme680.getHumidity());
-            printf("%.2f hPa,   ", bme680.getPressure() / 100.0);
-            printf("%.2f KOhms\r\n", bme680.getGasResistance() / 1000.0);
-        }
+        printf("%.2f, %.2f, %.2f, %.2f\n", bme680_sensor_data[0], bme680_sensor_data[1], bme680_sensor_data[2], bme680_sensor_data[3]);
     }
 
     return 0;

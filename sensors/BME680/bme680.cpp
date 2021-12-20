@@ -731,11 +731,6 @@ static int8_t get_calib_data(struct bme680_dev *dev)
 		if (rslt == BME680_OK)
 			rslt = bme680_get_regs(BME680_COEFF_ADDR2, &coeff_array[BME680_COEFF_ADDR1_LEN]
 			, BME680_COEFF_ADDR2_LEN, dev);
-printf("coeff_array = \n");
-for(int i=0;i<41;i++)
-{
-	printf("%d: %d\n",i,coeff_array[i]);
-}
 		/* Temperature related coefficients */
 		dev->calib.par_t1 = (uint16_t) (BME680_CONCAT_BYTES(coeff_array[BME680_T1_MSB_REG],
 			coeff_array[BME680_T1_LSB_REG]));
