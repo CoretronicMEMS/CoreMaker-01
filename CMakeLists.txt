@@ -12,13 +12,14 @@ include(${MBED_PATH}/tools/cmake/app.cmake)
 project(${APP_TARGET})
 
 add_compile_options(-Wno-unused-variable)
+add_subdirectory(TARGET_AIOT2101)
 add_subdirectory(${MBED_PATH})
 
 add_executable(${APP_TARGET})
 
 include(${MBED_CONFIG_PATH}/mbed_config.cmake)
 
-
+mbed_configure_app_target(${APP_TARGET})
 
 target_include_directories(${APP_TARGET}
     PUBLIC

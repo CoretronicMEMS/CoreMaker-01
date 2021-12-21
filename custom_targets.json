@@ -1,0 +1,24 @@
+{
+    "AIOT2101": {
+        "inherits": [
+            "MCU_M480"
+        ],
+        "macros_add": [
+            "MBEDTLS_CONFIG_HW_SUPPORT"
+        ],
+        "detect_code": [
+            "1234"
+        ],
+        "device_name": "M484SIDAE",
+        "device_has_remove": ["RTC"],
+        "overrides": {
+            "hxt-present": false,
+            "lxt-present": false,
+            "usb-uart": "UART_1",
+            "usb-uart-tx": "PA_9",
+            "usb-uart-rx": "PA_8",
+            "spim-ccm-enable": 1,
+            "network-default-interface-type": "WIFI"
+        }
+    }
+}

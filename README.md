@@ -1,25 +1,25 @@
 
 Menu
----
+====
 
-<!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
-
-<!-- code_chunk_output -->
-
+- [Menu](#menu)
 - [Requirements](#requirements)
 - [Git clone](#git-clone)
 - [Build project](#build-project)
-  - [Configure and build in a single step](#configure-and-build-in-a-single-step)
-  - [Build the project with CMake (advanced)](#build-the-project-with-cmake-advanced)
-  - [Flash programming](#flash-programming)
+    - [Configure and build in a single step](#configure-and-build-in-a-single-step)
+    - [Build the project with CMake (advanced)](#build-the-project-with-cmake-advanced)
+    - [Flash programming](#flash-programming)
 - [Recommend editor](#recommend-editor)
-  - [VSCode](#vscode)
-
-<!-- /code_chunk_output -->
+    - [VSCode](#vscode)
+      - [Extensions](#extensions)
+      - [VSCode configuration](#vscode-configuration)
+        - [tasks.json](#tasksjson)
+        - [settings.json](#settingsjson)
 
 ---
 
-## Requirements
+Requirements
+============
 
 * Python 3.6 or newer.
 * Pip
@@ -41,24 +41,32 @@ Menu
 * NuMicro_ICP_Programming_Tool
    * https://www.nuvoton.com/support/tool-and-software/software/programmer/?__locale=zh_TW
 
-## Git clone
+---
+
+Git clone
+=========
+
 ```
 git clone --recurse-submodules <repo url>
 ```
 
-## Build project
+---
+
+Build project
+=============
 
 ### Configure and build in a single step
+
 ```
-mbed-tools compile -m NUMAKER_IOT_M487 -t GCC_ARM
+mbed-tools compile -m AIOT2101 -t GCC_ARM
 ```
 
 ### Build the project with CMake (advanced)
 
 ```
-mbed-tools configure -m NUMAKER_IOT_M487 -t GCC_ARM
-cmake -S . -B cmake_build/NUMAKER_IOT_M487/develop/GCC_ARM -GNinja
-cmake --build ./cmake_build/NUMAKER_IOT_M487/develop/GCC_ARM
+mbed-tools configure -t GCC_ARM -m AIOT2101
+cmake -S . -B cmake_build/AIOT2101/develop/GCC_ARM -GNinja
+cmake --build ./cmake_build/AIOT2101/develop/GCC_ARM
 ```
 
 ### Flash programming
@@ -66,12 +74,14 @@ cmake --build ./cmake_build/NUMAKER_IOT_M487/develop/GCC_ARM
   1. Open NuMicro_ICP_Programming_Tool
   2. Select `M480 series`
   3. Select `APROM` file (*.bin or *.hex)
-     ```./cmake_build/NUMAKER_IOT_M487/develop/GCC_ARM/AIOT_2101.bin```
+     ```./cmake_build/AIOT2101/develop/GCC_ARM/AIOT_2101.bin```
   4. Enable `APROM` check box
   5. Press `Start`
 
+---
 
-## Recommend editor
+Recommend editor
+================
 
 ### VSCode
    https://code.visualstudio.com/
@@ -82,7 +92,7 @@ cmake --build ./cmake_build/NUMAKER_IOT_M487/develop/GCC_ARM
    #### VSCode configuration
 
    ##### tasks.json
-   ```
+   ```json
    "tasks": [
       {
          "type": "shell",
@@ -90,7 +100,7 @@ cmake --build ./cmake_build/NUMAKER_IOT_M487/develop/GCC_ARM
          "command": "cmake.exe",
          "args": [
                "--build",
-               "cmake_build/NUMAKER_IOT_M487/develop/GCC_ARM/"
+               "cmake_build/AIOT2101/develop/GCC_ARM/"
          ],
          "problemMatcher": [
                "$gcc"
@@ -106,5 +116,5 @@ cmake --build ./cmake_build/NUMAKER_IOT_M487/develop/GCC_ARM
    ##### settings.json
    ```
    "cmake.generator": "Ninja",
-   "cmake.buildDirectory": "${workspaceFolder}/cmake_build/NUMAKER_IOT_M487/develop/GCC_ARM",
+   "cmake.buildDirectory": "${workspaceFolder}/cmake_build/AIOT2101/develop/GCC_ARM",
    ```
