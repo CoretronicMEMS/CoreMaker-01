@@ -27,6 +27,7 @@ target_include_directories(${APP_TARGET}
         ${CMAKE_CURRENT_SOURCE_DIR}/nvt_rs485/
         ${CMAKE_CURRENT_SOURCE_DIR}/sensors/
         ${CMAKE_CURRENT_SOURCE_DIR}/sensors/BME680
+        ${CMAKE_CURRENT_SOURCE_DIR}/sd_card
 )
 
 target_sources(${APP_TARGET}
@@ -37,12 +38,14 @@ target_sources(${APP_TARGET}
         sensors/SensorHub.cpp
         sensors/BME680/mbed_bme680.cpp
         sensors/BME680/bme680.cpp
+        sd_card/NuSDBlockDevice.cpp
 )
 
 target_link_libraries(${APP_TARGET}
     PRIVATE
         mbed-os
         mbed-netsocket
+        mbed-storage
 )
 
 mbed_set_post_build(${APP_TARGET})
