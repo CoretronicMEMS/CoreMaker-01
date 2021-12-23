@@ -10,11 +10,12 @@ Menu
     - [Build the project with CMake (advanced)](#build-the-project-with-cmake-advanced)
     - [Flash programming](#flash-programming)
 - [Recommend editor](#recommend-editor)
-    - [VSCode](#vscode)
-      - [Extensions](#extensions)
-      - [VSCode configuration](#vscode-configuration)
-        - [tasks.json](#tasksjson)
-        - [settings.json](#settingsjson)
+  - [VSCode](#vscode)
+    - [Extensions](#extensions)
+    - [VSCode configuration](#vscode-configuration)
+      - [CMake for mbed setting](#cmake-for-mbed-setting)
+      - [C/C++ intellisense](#cc-intellisense)
+      - [VSCode Tasks (Optional)](#vscode-tasks-optional)
 
 ---
 
@@ -83,15 +84,49 @@ cmake --build ./cmake_build/AIOT2101/develop/GCC_ARM
 Recommend editor
 ================
 
-### VSCode
+## VSCode
    https://code.visualstudio.com/
-   #### Extensions
+   ### Extensions
    * C/C++
    * CMake
 
-   #### VSCode configuration
+   ### VSCode configuration
 
-   ##### tasks.json
+   #### CMake for mbed setting
+   
+   Add `.vscode/settings.json`
+   ```json
+   "cmake.generator": "Ninja",
+   "cmake.buildDirectory": "${workspaceFolder}/cmake_build/AIOT2101/develop/GCC_ARM",
+   ```
+
+   #### C/C++ intellisense
+
+   Add `.vscode/c_cpp_properties.json`
+   ``` json
+   {
+    "configurations": [
+        {
+            "name": "CortexM",
+            "includePath": [
+                "${workspaceFolder}/**"
+            ],
+            "defines": [],
+            "cStandard": "gnu17",
+            "compilerPath": "D:\\projects\\gcc-arm-none-eabi-9-2020-q2-update-win32\\bin\\arm-none-eabi-gcc.exe",
+            "cppStandard": "gnu++14",
+            "intelliSenseMode": "linux-gcc-arm",
+            "compileCommands": "cmake_build/AIOT2101/develop/GCC_ARM/compile_commands.json",
+            "configurationProvider": "ms-vscode.cmake-tools"
+        }
+    ],
+    "version": 4
+}
+```
+
+   #### VSCode Tasks (Optional)
+
+   Add `.vscode/tasks.json`
    ```json
    "tasks": [
       {
@@ -112,9 +147,4 @@ Recommend editor
          "detail": "編譯器: cmake"
       }
    ]
-   ```
-   ##### settings.json
-   ```
-   "cmake.generator": "Ninja",
-   "cmake.buildDirectory": "${workspaceFolder}/cmake_build/AIOT2101/develop/GCC_ARM",
    ```

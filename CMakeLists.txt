@@ -44,6 +44,7 @@ target_sources(${APP_TARGET}
 target_link_libraries(${APP_TARGET}
     PRIVATE
         mbed-os
+        mbed-usb
         mbed-netsocket
         mbed-storage
 )

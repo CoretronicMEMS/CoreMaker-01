@@ -59,6 +59,6 @@
         "mstd_iterator": "cpp"
     },
     "cmake.generator": "Ninja",
-    "cmake.buildDirectory": "${workspaceFolder}/cmake_build/NUMAKER_IOT_M487/develop/GCC_ARM",
+    "cmake.buildDirectory": "${workspaceFolder}/cmake_build/AIOT2101/develop/GCC_ARM",
     "cmake.configureOnOpen": true
 }

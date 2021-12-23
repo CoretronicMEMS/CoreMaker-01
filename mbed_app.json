@@ -3,9 +3,7 @@
         "*":{
             "platform.stdio-baud-rate"                  : 115200,
             "platform.stdio-convert-newlines"           : true,
-            "target.device_has_remove"                  : ["RTC"],
-            "target.lxt-present"                        : false,
-            "platform.minimal-printf-enable-floating-point"                          : true
+            "platform.minimal-printf-enable-floating-point" : true
         },
         "NUMAKER_IOT_M487": {
             "target.usb-uart"                           : "UART_0",

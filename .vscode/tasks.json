@@ -9,7 +9,7 @@
             "command": "cmake.exe",
             "args": [
                 "--build",
-                "cmake_build/NUMAKER_IOT_M487/develop/GCC_ARM/"
+                "cmake_build/AIOT2101/develop/GCC_ARM/"
             ],
             "problemMatcher": [
                 "$gcc"

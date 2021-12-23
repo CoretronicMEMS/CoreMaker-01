@@ -1,5 +1,6 @@
 #include "mbed.h"
 #include "mbed_bme680.h"
+#include "USBSerial.h"
 #include "SensorHub.h"
 #include "ADS131E.h"
 #include "global.h"
@@ -115,7 +116,9 @@ int write_sd_card_txt_data(const char *filename, int *data, unsigned int len)
 
 int main()
 {
-    printf("Mbed OS version - %d.%d.%d\n\n", MBED_MAJOR_VERSION, MBED_MINOR_VERSION, MBED_PATCH_VERSION);
+    printf("\nMbed OS version - %d.%d.%d\n\n", MBED_MAJOR_VERSION, MBED_MINOR_VERSION, MBED_PATCH_VERSION);
+
+    USBCDC serial(false);
 
     threadHub.start(CMC::SensorHub_Task);
 
