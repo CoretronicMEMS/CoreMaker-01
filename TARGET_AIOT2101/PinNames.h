@@ -42,74 +42,58 @@ typedef enum {
     PG_0    = NU_PINNAME(6, 0), PG_1, PG_2, PG_3, PG_4, PG_5, PG_6, PG_7, PG_8, PG_9, PG_10, PG_11, PG_12, PG_13, PG_14, PG_15,
     PH_0    = NU_PINNAME(7, 0), PH_1, PH_2, PH_3, PH_4, PH_5, PH_6, PH_7, PH_8, PH_9, PH_10, PH_11,
 
-    // Arduino UNO naming
-    A0 = PB_6,
-    A1 = PB_7,
-    A2 = PB_8,
-    A3 = PB_9,
-    A4 = PB_0,
-    A5 = PB_1,
+    // mikroBUS naming
+    MIKOR_AN = PB_7,
+    MIKOR_RST = PC_14,
+    MIKOR_SS = PB_10,
+    MIKOR_SCK = PB_11,
+    MIKOR_MISO = PB_9,
+    MIKOR_MOSI = PB_8,
+    MIKOR_PWM = PC_2,
+    MIKOR_INT = PB_13,
+    MIKOR_RX = PC_4,
+    MIKOR_TX = PC_5,
+    MIKOR_SCL = PC_1,
+    MIKOR_SDA = PC_0,
 
-    D0 = PB_2,
-    D1 = PB_3,
-    D2 = PC_9,
-    D3 = PC_10,
-    D4 = PC_11,
-    D5 = PC_12,
-    D6 = PE_4,
-    D7 = PE_5,
-    D8 = PA_5,
-    D9 = PA_4,
-    D10 = PA_3,
-    D11 = PA_0,
-    D12 = PA_1,
-    D13 = PA_2,
-    D14 = PG_1,
-    D15 = PG_0,
 
     // Note: board-specific
     // UART naming
-#if defined(MBED_CONF_TARGET_USB_UART_TX)
-    CONSOLE_TX           = MBED_CONF_TARGET_USB_UART_TX,
-#else
-    CONSOLE_TX           = NC,
-#endif
-#if defined(MBED_CONF_TARGET_USB_UART_RX)
-    CONSOLE_RX           = MBED_CONF_TARGET_USB_UART_RX,
-#else
-    CONSOLE_RX           = NC,
-#endif
 #if defined(MBED_CONF_TARGET_STDIO_UART_TX)
-    STDIO_UART_TX   = MBED_CONF_TARGET_STDIO_UART_TX,
+    STDIO_UART_TX = MBED_CONF_TARGET_STDIO_UART_TX,
 #else
-    STDIO_UART_TX   = CONSOLE_TX,
+    STDIO_UART_TX = PA_9,
 #endif
 #if defined(MBED_CONF_TARGET_STDIO_UART_RX)
-    STDIO_UART_RX   = MBED_CONF_TARGET_STDIO_UART_RX,
+    STDIO_UART_RX = MBED_CONF_TARGET_STDIO_UART_RX,
 #else
-    STDIO_UART_RX   = CONSOLE_RX,
+    STDIO_UART_RX = PA_8,
 #endif
-    SERIAL_TX = D10,
-    SERIAL_RX = D13,
+    CONSOLE_TX = STDIO_UART_TX,
+    CONSOLE_RX = STDIO_UART_RX,
+
+    SERIAL_TX = PB_15,
+    SERIAL_RX = PB_14,
 
     // I2C naming
-    I2C_SCL = D15,
-    I2C_SDA = D14,
+    I2C_SCL = PA_7,
+    I2C_SDA = PA_6,
 
     // LED naming
-    LED_RED = PH_0,
-    LED_YELLOW = PH_1,
-    LED_GREEN = PH_2,
+    LED_RED = PC_7,
+    LED_GREEN = PC_6,
+    LED_BLUE = PA_5,
     LED1 = LED_RED,
-    LED2 = LED_YELLOW,
-    LED3 = LED_GREEN,
-    LED4 = LED1,    // No real LED. Just for passing ATS.
+    LED2 = LED_GREEN,
+    LED3 = LED_BLUE,
 
     // Button naming
-    SW2 = PF_11,
-    SW3 = PG_5,
+    SW2 = PA_4,
     BUTTON1 = SW2,
-    BUTTON2 = SW3,
+
+    // Switch naming
+    SW3_2 = PF_4,
+    SW3_3 = PF_5,
 
     // Force PinName to 32-bit required by NU_PINNAME_BIND(...)
     FORCE_ENUM_PINNAME_32BIT = 0x7FFFFFFF,

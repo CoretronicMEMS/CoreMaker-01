@@ -14,9 +14,9 @@
         "overrides": {
             "hxt-present": true,
             "lxt-present": false,
-            "usb-uart": "UART_1",
-            "usb-uart-tx": "PA_9",
-            "usb-uart-rx": "PA_8",
+            "stdio-uart": "UART_1",
+            "stdio-uart-tx": "PA_9",
+            "stdio-uart-rx": "PA_8",
             "network-default-interface-type": "WIFI",
             "usb-device-hsusbd": 1
         }

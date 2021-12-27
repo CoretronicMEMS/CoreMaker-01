@@ -3,6 +3,11 @@ Menu
 ====
 
 - [Menu](#menu)
+- [Board overview](#board-overview)
+  - [Sensor](#sensor)
+  - [LED](#led)
+  - [Switch](#switch)
+  - [Connector](#connector)
 - [Requirements](#requirements)
 - [Git clone](#git-clone)
 - [Build project](#build-project)
@@ -18,6 +23,113 @@ Menu
       - [VSCode Tasks (Optional)](#vscode-tasks-optional)
 
 ---
+
+Board overview
+==============
+
+![alt text](docs/board_top_view.png)
+
+## Sensor
+
+| Sensor | define         | description   |
+| ------ | -------------- | ------------- |
+| U1     | SPU0410LR5H-QB | Microphone    |
+| U3     | GMC306A        | Geomagnetic   |
+| U4     | GMP102         | Pressure      |
+| U5     | BME680         | Environment   |
+| U6     | KX122-103      | Accelerometer |
+
+## LED
+
+| LED | pin | define     |
+| --- | --- | ---------- |
+| D5  | PC7 | Red LED    |
+| D6  | PC6 | Green LED  |
+| D7  | PA5 | Yellow LED |
+
+## Switch
+
+| Switch | pin | define           |
+| ------ | --- | ---------------- |
+| SW1    | x   | Reset button     |
+| SW2    | PA4 | PA4, user define |
+| SW3_1  | X   |                  |
+| SW3_2  | PF4 |                  |
+| SW3_3  | PF5 |                  |
+| SW3_4  | X   |                  |
+
+## Connector
+
+* J1
+
+| pin | define  |
+| --- | ------- |
+| 1   | V33     |
+| 2   | ICE_DAT |
+| 3   | ICE_CLK |
+| 4   | RESET   |
+| 5   | GND     |
+
+* J2: SD-Card
+
+* J3
+
+| pin | define          | pin | define          |
+| --- | --------------- | --- | --------------- |
+| 1   | EADC0_CH7_mikro | 2   | EPWM1_CH3_mikro |
+| 3   | PC14_mikro      | 4   | PB13_mikro      |
+| 5   | SPI3_SS_mikro   | 6   | UART2_RXD_mikro |
+| 7   | SPI3_CLK_mikro  | 8   | UART2_TXD_mikro |
+| 9   | SPI3_MISO_mikro | 10  | I2C0_SCL_mikro  |
+| 11  | SPI3_MOSI_mikro | 12  | I2C0_SDA_mikro  |
+
+* J4: USB
+
+* J5
+
+| pin | define       |
+| --- | ------------ |
+| 1   | Battery      |
+| 2   | Boost_EN     |
+| 3   | GND          |
+
+* J6
+
+| pin | define       |
+| --- | ------------ |
+| 1   | V5V_Battery  |
+| 2   | V5V          |
+| 3   | V5V_USB      |
+
+* J7
+
+| pin | define       |
+| --- | ------------ |
+| 1   | GND          |
+| 2   | GND          |
+
+* J8
+
+| pin | define       |
+| --- | ------------ |
+| 1   | UART1_TXD    |
+| 2   | UART1_RXD    |
+| 3   | GND          |
+
+* J11
+
+| pin | define       |
+| --- | ------------ |
+| 1   | UART1_RX_ITM |
+| 2   | UART1_TX_ITM |
+
+* J15
+
+| pin | define       |
+| --- | ------------ |
+| 1   | CMD_UART_TX  |
+| 2   | CMD_UART_RX  |
+
 
 Requirements
 ============
@@ -103,6 +215,7 @@ Recommend editor
    #### C/C++ intellisense
 
    Add `.vscode/c_cpp_properties.json`
+   According to your environment to replace "compilerPath" setting.
    ``` json
    {
     "configurations": [
