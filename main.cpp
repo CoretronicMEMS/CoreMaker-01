@@ -9,9 +9,7 @@
 
 Thread threadHub;
 
-
 using namespace CMC;
-
 
 DigitalOut led_r(LED_RED);
 DigitalOut led_g(LED_GREEN);
@@ -27,7 +25,6 @@ int main()
     led_b = 1;
     printf("\nMbed OS version - %d.%d.%d\n\n", MBED_MAJOR_VERSION, MBED_MINOR_VERSION, MBED_PATCH_VERSION);
 
-    
     serial.connect();
     threadHub.start(CMC::SensorHub_Task);
 
@@ -39,7 +36,8 @@ int main()
         ThisThread::sleep_for(chrono::milliseconds(500));
 
         printf("%ld, %ld, %ld, %ld, %ld, %ld\n", adc_data[0], adc_data[1], adc_data[2], adc_data[3], adc_data[4], adc_data[5]);
-        printf("%.2f, %.2f, %.2f, %.2f\n", bme680_sensor_data[0], bme680_sensor_data[1], bme680_sensor_data[2], bme680_sensor_data[3]);
+        printf("bme680_sensor_data:%.2f, %.2f, %.2f, %.2f\n", bme680_sensor_data[0], bme680_sensor_data[1], bme680_sensor_data[2], bme680_sensor_data[3]);
+        printf("kx122_data:%.2f, %.2f, %.2f\n", kx122_data[0], kx122_data[1], kx122_data[2]);
         serial.send((uint8_t *)"hello\r\n", 7);
     }
 
