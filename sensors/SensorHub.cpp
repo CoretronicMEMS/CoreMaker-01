@@ -36,7 +36,6 @@ namespace CMC
     {
         int sw_sel;
         sw_sel = (sw3_2<<0) | (sw3_3<<1);
-        return 1;
         return sw_sel;
     }
 
