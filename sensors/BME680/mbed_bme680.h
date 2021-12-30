@@ -30,6 +30,7 @@ namespace CMC
         int32_t Write(const void *data, uint32_t num) override final;
         int32_t Read(void *data, uint32_t num) override final;
         int32_t Control(uint32_t control, uint32_t arg) override final;
+        virtual const char* Name() { return "bme680"; }
 
     private:
         bool _filterEnabled, _tempEnabled, _humEnabled, _presEnabled, _gasEnabled;
