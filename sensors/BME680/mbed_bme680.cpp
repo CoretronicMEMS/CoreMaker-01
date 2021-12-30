@@ -27,6 +27,7 @@ namespace CMC
         gas_sensor.read = &BME680::i2c_read;
         gas_sensor.write = &BME680::i2c_write;
         gas_sensor.delay_ms = BME680::delay_msec;
+        gas_sensor.power_mode = BME680_FORCED_MODE;
 
         setTemperatureOversampling(_temperature_os);
         setPressureOversampling(_pressure_os);
@@ -38,6 +39,8 @@ namespace CMC
 
         if (result != BME680_OK)
             return -1;
+
+        _send_data_ready.attach(callback(this, &BME680::SetDataReady), chrono::milliseconds(1000));
 
         return 0;
     }
@@ -61,9 +64,11 @@ namespace CMC
     {
         if (control == SENSOR_CTRL_START)
         {
+            return SetPowerMode(BME680_FORCED_MODE);
         }
         else if (control == SENSOR_CTRL_STOP)
         {
+            return SetPowerMode(BME680_SLEEP_MODE);
         }
         else if (control == SENSOR_CTRL_SET_ODR)
         {
@@ -74,15 +79,10 @@ namespace CMC
         }
         else if (control == SENSOR_CTRL_GET_ODR)
         {
+            *((uint32_t *)arg) = 1; // only support 1Hz
         }
         else if (control == SENSOR_CTRL_SET_GAIN)
         {
-        }
-        else if (control == BME680_CTRL_GET_SAMPLE_COUNT)
-        {
-            *((uint32_t *)arg) = m_intCount;
-            m_intCount = 0;
-            return 1;
         }
 
         return 0;
@@ -103,12 +103,26 @@ namespace CMC
             {
                 data[3] = 0;
             }
-            m_intCount++;
 
             return 0;
         }
 
         return -1;
+    }
+
+    int32_t BME680::SetPowerMode(uint8_t power_mode)
+    {
+        int8_t result;
+        gas_sensor.power_mode = power_mode;
+        /* Set the power mode */
+        result = bme680_set_sensor_mode(&gas_sensor);
+
+        if (result != BME680_OK)
+        {
+            return -1;
+        }
+
+        return 0;
     }
 
     /**
@@ -123,7 +137,7 @@ namespace CMC
 
         /* Select the power mode */
         /* Must be set before writing the sensor configuration */
-        gas_sensor.power_mode = BME680_FORCED_MODE;
+        // gas_sensor.power_mode = BME680_FORCED_MODE;
 
         /* Set the required sensor settings needed */
         if (_tempEnabled)
