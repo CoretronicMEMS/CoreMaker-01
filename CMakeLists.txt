@@ -34,6 +34,7 @@ target_sources(${APP_TARGET}
     PRIVATE
         main.cpp
         sensors/ADS131E.cpp
+        sensors/GMC306.cpp
         sensors/AcousticNode.cpp
         sensors/SensorHub.cpp
         sensors/BME680/mbed_bme680.cpp

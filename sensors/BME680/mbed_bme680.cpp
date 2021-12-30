@@ -2,8 +2,9 @@
 
 namespace CMC
 {
+    I2C* _i2c_dev;
 
-    BME680::BME680(uint8_t adr, uint8_t temperature_os,
+    BME680::BME680(uint8_t adr, I2C* i2c_dev, uint8_t temperature_os,
                    uint8_t pressure_os, uint8_t humidity_os,
                    uint8_t filter_size, uint16_t heater_temp,
                    uint16_t heater_time) : _adr(adr),
@@ -12,6 +13,7 @@ namespace CMC
                                            _heater_temp(heater_temp), _heater_time(heater_time)
     {
         _filterEnabled = _tempEnabled = _humEnabled = _presEnabled = _gasEnabled = false;
+        _i2c_dev = i2c_dev;
     }
 
     BME680::~BME680()
@@ -302,10 +304,10 @@ namespace CMC
 
         log("[0x%X] I2C $%X => ", dev_id >> 1, data[0]);
 
-        result = bme680_i2c.write(dev_id, data, 1);
+        result = _i2c_dev->write(dev_id, data, 1);
         log("[W: %d] ", result);
 
-        result = bme680_i2c.read(dev_id, (char *)reg_data, len);
+        result = _i2c_dev->read(dev_id, (char *)reg_data, len);
 
         for (uint8_t i = 0; i < len; i++)
             log("0x%X ", reg_data[i]);
@@ -337,7 +339,7 @@ namespace CMC
 
         log("[0x%X] I2C $%X <= ", dev_id >> 1, data[0]);
 
-        result = bme680_i2c.write(dev_id, data, len + 1);
+        result = _i2c_dev->write(dev_id, data, len + 1);
 
         for (uint8_t i = 1; i < len + 1; i++)
             log("0x%X ", data[i]);

@@ -33,13 +33,10 @@ int main()
 
     while (1)
     {
-        led_g = 0;
-        ThisThread::sleep_for(chrono::milliseconds(500));
-        led_g = 1;
-        ThisThread::sleep_for(chrono::milliseconds(500));
+        ThisThread::sleep_for(chrono::milliseconds(1000));
 
-        printf("%ld, %ld, %ld, %ld, %ld, %ld\n", adc_data[0], adc_data[1], adc_data[2], adc_data[3], adc_data[4], adc_data[5]);
-        printf("%.2f, %.2f, %.2f, %.2f\n", bme680_sensor_data[0], bme680_sensor_data[1], bme680_sensor_data[2], bme680_sensor_data[3]);
+        // printf("%ld, %ld, %ld, %ld, %ld, %ld\n", adc_data[0], adc_data[1], adc_data[2], adc_data[3], adc_data[4], adc_data[5]);
+        // printf("%.2f, %.2f, %.2f, %.2f\n", bme680_sensor_data[0], bme680_sensor_data[1], bme680_sensor_data[2], bme680_sensor_data[3]);
         serial.send((uint8_t *)"hello\r\n", 7);
     }
 

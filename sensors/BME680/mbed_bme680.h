@@ -12,8 +12,6 @@
 
 namespace CMC
 {
-    extern I2C bme680_i2c;
-
     /**
  * BME680 Class for I2C usage.
  * Wraps the Bosch library for MBed usage.
@@ -22,7 +20,7 @@ namespace CMC
     class BME680 final : public Sensor
     {
     public:
-        BME680(uint8_t adr, uint8_t temperature_os = BME680_OS_8X,
+        BME680(uint8_t adr, I2C* i2c_dev, uint8_t temperature_os = BME680_OS_8X,
                uint8_t pressure_os = BME680_OS_4X, uint8_t humidity_os = BME680_OS_8X,
                uint8_t filter_size = BME680_FILTER_SIZE_3, uint16_t heater_temp = 320,
                uint16_t heater_time = 150);

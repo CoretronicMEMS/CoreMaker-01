@@ -28,9 +28,9 @@ namespace CMC {
 
 enum SensorType
 {
-    SENSOR_ADS131E,
     SENSOR_ACOUSTIC_NODE,
     SENSOR_BME680,
+    SENSOR_GMC306,
     SENSOR_MAX
 };
 
@@ -46,6 +46,7 @@ public:
     virtual int32_t Write(const void *data, uint32_t num) = 0;
     virtual int32_t Read(void *data, uint32_t num) = 0;
     virtual int32_t Control(uint32_t control, uint32_t arg) = 0;
+    virtual const char* Name() { return ""; }
 
     void SetAsyncEvent(EventFlags *eventHandle, uint32_t flags)
     {
