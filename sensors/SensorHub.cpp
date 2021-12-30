@@ -1,28 +1,31 @@
-
-
 #include "SensorHub.h"
 #include "ADS131E.h"
 #include "AcousticNode.h"
 #include "mbed_bme680.h"
+#include "KX122.h"
 #include "GMC306.h"
 
 extern DigitalOut led_r;
 extern DigitalOut led_g;
 extern DigitalOut led_b;
 
+
 namespace CMC
 {
     SPI spi0(PA_0, PA_1, PA_2, PA_3, mbed::use_gpio_ssel);
-    I2C i2c_sensor(I2C_SDA, I2C_SCL);
+    I2C i2c1(I2C_SDA, I2C_SCL);
 
     AcousticNode acoustic_node(PB_6, 48000);
-    BME680 bme680(0x76 << 1, &i2c_sensor);
-    GMC306 gmc306(&i2c_sensor);
+    BME680 bme680(0x76 << 1, &i2c1);
+    GMC306 gmc306(&i2c1);
+    KX122 kx122(&spi0, PA_10);
+
     EventFlags sensorEvent("sensorEvent");
 
     int32_t adc_data[6];
     float bme680_sensor_data[4];
     int magnet_data[GMC306_ADC_CHANNELS];
+    float kx122_data[3];
 
     /**
      * @brief Sensor list. 
@@ -30,11 +33,12 @@ namespace CMC
      * 
      */
     Sensor *sensors[] =
-        {
-            &acoustic_node,
-            &bme680,
-            &gmc306
-        };
+    {
+        &acoustic_node,
+        &bme680,
+        &kx122,
+        &gmc306
+    };
 
     /**
      *@brief set the ODR of the sensor
@@ -81,7 +85,9 @@ namespace CMC
                 DBG_MSG("SensorHub_SensorTest\n");
                 return sensors[sensor_id]->Control(control, 0);
             case SENSOR_CTRL_GET_ODR:
-                return sensors[sensor_id]->Control(control, arg);
+                uint32_t odr;
+                sensors[sensor_id]->Control(control, (uint32_t)&odr);
+                return odr;
             case SENSOR_CTRL_GET_GAIN:
             default:
                 break;
@@ -142,6 +148,10 @@ namespace CMC
             {
                 //printf("No event\n");
                 led_g = 0;
+            }
+            if (flags & SENSOR_EVENT(SENSOR_KX122))
+            {
+                sensors[SENSOR_KX122]->Read(&kx122_data, sizeof(kx122_data));
             }
         }
     }

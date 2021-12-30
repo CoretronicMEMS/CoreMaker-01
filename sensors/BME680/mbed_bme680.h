@@ -37,14 +37,15 @@ namespace CMC
         struct bme680_dev gas_sensor;
         struct bme680_field_data bme680_data;
         uint8_t _adr;
-        uint32_t m_intCount;
         uint8_t _temperature_os;
         uint8_t _pressure_os;
         uint8_t _humidity_os;
         uint8_t _filter_size;
         uint16_t _heater_temp;
         uint16_t _heater_time;
+        Ticker _send_data_ready;
 
+        int32_t SetPowerMode(uint8_t power_mode);
         int32_t ReadData(float *data, uint32_t num);
         static void log(const char *format, ...);
         bool setTemperatureOversampling(uint8_t os);

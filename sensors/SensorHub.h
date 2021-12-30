@@ -30,6 +30,7 @@ enum SensorType
 {
     SENSOR_ACOUSTIC_NODE,
     SENSOR_BME680,
+    SENSOR_KX122,
     SENSOR_GMC306,
     SENSOR_MAX
 };
@@ -82,6 +83,7 @@ void     SensorHub_Task();
 extern Sensor* sensors[];
 extern int32_t adc_data[6];
 extern float bme680_sensor_data[4];
+extern float kx122_data[3];
 
 };
 
