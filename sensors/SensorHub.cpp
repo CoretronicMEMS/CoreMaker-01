@@ -1,14 +1,21 @@
 #include "SensorHub.h"
+#include "USBSerial.h"
 #include "ADS131E.h"
 #include "AcousticNode.h"
 #include "mbed_bme680.h"
 #include "KX122.h"
 #include "GMC306.h"
+#include "DebounceIn.h"
 
 extern DigitalOut led_r;
 extern DigitalOut led_g;
 extern DigitalOut led_b;
+extern DebounceIn sw2;
+extern DigitalIn sw3_2;
+extern DigitalIn sw3_3;
+extern USBCDC serial;
 
+#define SW_EVENT    0x8000
 
 namespace CMC
 {
@@ -20,19 +27,25 @@ namespace CMC
     GMC306 gmc306(&i2c1);
     KX122 kx122(&spi0, PA_10);
 
-    EventFlags sensorEvent("sensorEvent");
-
     int32_t adc_data[6];
     float bme680_sensor_data[4];
     int magnet_data[GMC306_ADC_CHANNELS];
     float kx122_data[3];
 
+    int GetSwitchSelect()
+    {
+        int sw_sel;
+        sw_sel = (sw3_2<<0) | (sw3_3<<1);
+        return 1;
+        return sw_sel;
+    }
+
     /**
      * @brief Sensor list. 
-     * The arrangement must be the same with enum _SensorType
+     * The arrangement must be the same with enum SensorType
      * 
      */
-    Sensor *sensors[] =
+    Sensor *SensorHub::sensors[] =
     {
         &acoustic_node,
         &bme680,
@@ -40,20 +53,45 @@ namespace CMC
         &gmc306
     };
 
+    SensorHub::SensorHub() : sensorEvent("sensorEvent")
+    {
+
+    }
+
     /**
-     *@brief set the ODR of the sensor
+     *@brief initialize all sensors
+     *
+     */
+    void SensorHub::Initial()
+    {
+        for (uint32_t i = 0; i < ARRAY_SIZE(sensors); i++)
+        {
+            sensors[i]->Initialize();
+            sensors[i]->SetAsyncEvent(&sensorEvent, SENSOR_EVENT(i));
+        }
+    }
+
+    /**
+     * @brief Start sensor hub thread
+     * 
+     */
+    void SensorHub::Start()
+    {
+        m_thread.start(callback(this, &SensorHub::HubTask));
+    }
+
+    /**
+     *@brief set the ODR of specific sensor
      *
      *@param sensor_id  sensor ID
      *@param odr        output data rate
      *@return uint32_t  ODR actually set
      */
-    uint32_t SensorHub_SetODR(SensorType sensor_id, uint32_t odr)
+    uint32_t SensorHub::SetODR(SensorType sensor_id, uint32_t odr)
     {
         uint32_t new_odr;
-        sensors[sensor_id]->Control(SENSOR_CTRL_STOP, 0);
         sensors[sensor_id]->Control(SENSOR_CTRL_SET_ODR, odr);
         sensors[sensor_id]->Control(SENSOR_CTRL_GET_ODR, (uint32_t)&new_odr);
-        sensors[sensor_id]->Control(SENSOR_CTRL_START, 0);
         return new_odr;
     }
 
@@ -65,7 +103,7 @@ namespace CMC
      *@param arg        command related parameters
      *@return int32_t   execution result
      */
-    int32_t SensorHub_Control(SensorType sensor_id, uint32_t control, uint32_t arg = 0)
+    int32_t SensorHub::Control(SensorType sensor_id, uint32_t control, uint32_t arg = 0)
     {
         if (sensor_id < SENSOR_MAX)
         {
@@ -73,12 +111,14 @@ namespace CMC
             {
             case SENSOR_CTRL_START:
                 DBG_MSG("SensorHub: sensor%d %s on\n", sensor_id, sensors[sensor_id]->Name());
+                m_SensorStart = true;
                 return sensors[sensor_id]->Control(control, arg);
             case SENSOR_CTRL_STOP:
-                DBG_MSG("SensorHub: sensor %d %s off\n", sensor_id, sensors[sensor_id]->Name());
+                DBG_MSG("SensorHub: sensor%d %s off\n", sensor_id, sensors[sensor_id]->Name());
+                m_SensorStart = false;
                 return sensors[sensor_id]->Control(control, arg);
             case SENSOR_CTRL_SET_ODR:
-                return SensorHub_SetODR(sensor_id, arg);
+                return SetODR(sensor_id, arg);
             case SENSOR_CTRL_SET_GAIN:
                 break;
             case SENSOR_CTRL_SELFTEST:
@@ -99,38 +139,29 @@ namespace CMC
     }
 
     /**
-     *@brief initialize all sensors
-     *
-     */
-    void SensorHub_Initial(void)
-    {
-        for (uint32_t i = 0; i < ARRAY_SIZE(sensors); i++)
-        {
-            sensors[i]->Initialize();
-            sensors[i]->SetAsyncEvent(&sensorEvent, SENSOR_EVENT(i));
-        }
-    }
-
-    /**
      * @brief Sensor hub thread
      * 
      */
-    void SensorHub_Task()
+    void SensorHub::HubTask()
     {
-        SensorHub_Initial();
-        SensorHub_Control(SENSOR_GMC306, SENSOR_CTRL_SET_ODR, 50);
-        SensorHub_Control(SENSOR_GMC306, SENSOR_CTRL_START);
+        Initial();
+
+        m_SensorSel = (SensorType)GetSwitchSelect();
+        DBG_MSG("Sensor select: %d\n", m_SensorSel);
+        Control(m_SensorSel, SENSOR_CTRL_START);
+    
+        sw2.fall(callback(this, &SensorHub::SW2PressISR));
 
         int count = 0;
         while (true)
         {
-            uint flags = sensorEvent.wait_any(0xFF, 1000);
+            uint flags = sensorEvent.wait_any(0xFFFF, 100);
             if (!(flags & osFlagsError))
             {
                 if (flags & SENSOR_EVENT(SENSOR_ACOUSTIC_NODE))
                 {
                     sensors[SENSOR_ACOUSTIC_NODE]->Read(&adc_data, sizeof(adc_data));
-                    printf("%ld, %ld, %ld, %ld, %ld, %ld\n", adc_data[0], adc_data[1], adc_data[2], adc_data[3], adc_data[4], adc_data[5]);
+                    //printf("%ld, %ld, %ld, %ld, %ld, %ld\n", adc_data[0], adc_data[1], adc_data[2], adc_data[3], adc_data[4], adc_data[5]);
                 }
                 if (flags & SENSOR_EVENT(SENSOR_BME680))
                 {
@@ -140,20 +171,43 @@ namespace CMC
                 if (flags & SENSOR_EVENT(SENSOR_GMC306))
                 {
                     sensors[SENSOR_GMC306]->Read(&magnet_data, sizeof(magnet_data));
-                    //printf("magnet: %d, %d, %d\n", magnet_data[0], magnet_data[1], magnet_data[2]);
+                    printf("magnet: %d, %d, %d\n", magnet_data[0], magnet_data[1], magnet_data[2]);
+                }
+                if (flags & SENSOR_EVENT(SENSOR_KX122))
+                {
+                    sensors[SENSOR_KX122]->Read(&kx122_data, sizeof(kx122_data));
+                }
+                if (flags & SW_EVENT)
+                {
+                    ButtonPress();
                 }
                 led_g = !led_g;
             }
-            else if (flags == osFlagsErrorTimeout)
+            else if (flags == osFlagsErrorTimeout) // No event
             {
-                //printf("No event\n");
-                led_g = 0;
-            }
-            if (flags & SENSOR_EVENT(SENSOR_KX122))
-            {
-                sensors[SENSOR_KX122]->Read(&kx122_data, sizeof(kx122_data));
+                led_g = 1;
             }
         }
     }
 
+    void SensorHub::SW2PressISR()
+    {
+        sensorEvent.set(SW_EVENT);
+    }
+
+    void SensorHub::ButtonPress()
+    {
+        if (m_SensorStart)
+        {
+            Control(m_SensorSel, SENSOR_CTRL_STOP);
+            m_SensorStart = false;
+        }
+        else
+        {
+            m_SensorSel = (SensorType)GetSwitchSelect();
+            Control(m_SensorSel, SENSOR_CTRL_START);
+            m_SensorStart = true;
+        }
+        led_b = !m_SensorStart;
+    }
 }

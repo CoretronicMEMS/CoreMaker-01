@@ -34,6 +34,7 @@ target_include_directories(${APP_TARGET}
 target_sources(${APP_TARGET}
     PRIVATE
         main.cpp
+        DebounceIn.cpp
         sensors/ADS131E.cpp
         sensors/GMC306.cpp
         sensors/AcousticNode.cpp

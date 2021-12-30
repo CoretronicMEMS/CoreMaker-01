@@ -6,15 +6,16 @@
 #include "global.h"
 #include "NuSDBlockDevice.h"
 #include "FATFileSystem.h"
+#include "DebounceIn.h"
 
-Thread threadHub;
 
 using namespace CMC;
 
+SensorHub sensorHub;
 DigitalOut led_r(LED_RED);
 DigitalOut led_g(LED_GREEN);
 DigitalOut led_b(LED_BLUE);
-DigitalIn sw2(SW2);
+DebounceIn sw2(SW2, PullUp);
 DigitalIn sw3_2(SW3_2);
 DigitalIn sw3_3(SW3_3);
 USBCDC serial(false);
@@ -26,7 +27,7 @@ int main()
     printf("\nMbed OS version - %d.%d.%d\n\n", MBED_MAJOR_VERSION, MBED_MINOR_VERSION, MBED_PATCH_VERSION);
 
     serial.connect();
-    threadHub.start(CMC::SensorHub_Task);
+    sensorHub.Start();
 
     while (1)
     {

@@ -74,16 +74,36 @@ protected:
     uint32_t m_flags;
 };
 
+class SensorHub {
+public:
+    SensorHub();
+    virtual ~SensorHub() = default;
 
-int32_t  SensorHub_Control(SensorType sensor_id, uint32_t control, uint32_t arg);
-void     SensorHub_Initial();
-void     SensorHub_Task();
+    void Start();
+    int32_t Control(SensorType sensor_id, uint32_t control, uint32_t arg);
+    uint32_t SetODR(SensorType sensor_id, uint32_t odr);
+
+    static Sensor* sensors[];
+
+protected:
+    void Initial();
+    void HubTask();
+    void SW2PressISR();
+    void ButtonPress();
+
+    Thread m_thread;
+    EventFlags sensorEvent;
+    EventFlags m_SwEvent;
+    SensorType m_SensorSel;
+    bool m_SensorStart = 0;
+};
 
 
-extern Sensor* sensors[];
 extern int32_t adc_data[6];
 extern float bme680_sensor_data[4];
 extern float kx122_data[3];
+
+int GetSwitchSelect();
 
 };
 
