@@ -42,8 +42,6 @@ namespace CMC
         if (result != BME680_OK)
             return -1;
 
-        _send_data_ready.attach(callback(this, &BME680::SetDataReady), chrono::milliseconds(1000));
-
         return 0;
     }
 
@@ -66,11 +64,22 @@ namespace CMC
     {
         if (control == SENSOR_CTRL_START)
         {
-            return SetPowerMode(BME680_FORCED_MODE);
+            int32_t ret = SetPowerMode(BME680_FORCED_MODE);
+            if (ret == 0)
+            {
+                _send_data_ready.attach(callback(this, &BME680::SetDataReady), chrono::milliseconds(1000));
+            }
+
+            return ret;
         }
         else if (control == SENSOR_CTRL_STOP)
         {
-            return SetPowerMode(BME680_SLEEP_MODE);
+            int32_t ret = SetPowerMode(BME680_SLEEP_MODE);
+            if (ret == 0)
+            {
+                _send_data_ready.detach();
+            }
+            return ret;
         }
         else if (control == SENSOR_CTRL_SET_ODR)
         {
