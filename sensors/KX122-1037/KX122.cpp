@@ -74,7 +74,7 @@ namespace CMC
             // printf("KX122_ODCNTL = 0x%x\n", SPIReadRegister(KX122_ODCNTL));
 
             //Setup G-range and 8/16-bit resolution + set CNTL1 PC1-bit to operating mode (also WUF_EN, TP_EN and DT_EN)
-            SPIWriteRegister(KX122_CNTL1, (KX122_CNTL1_PC1 | KX122_CNTL1_GSEL_8G | KX122_CNTL1_RES | KX122_CNTL1_DRDYE));
+            SPIWriteRegister(KX122_CNTL1, (/*KX122_CNTL1_PC1 | */ KX122_CNTL1_GSEL_8G | KX122_CNTL1_RES | KX122_CNTL1_DRDYE));
             // printf("KX122_CNTL1 = 0x%x\n", SPIReadRegister(KX122_CNTL1));
 
             //resolution_divider = 32768/2;  //KX122_CNTL1_GSEL_2G
@@ -249,7 +249,6 @@ namespace CMC
         value = SPIReadRegister(reg_addr);
         value = value & ~mask;
         value = value | (bits & mask);
-        wait_us(10);
         SPIWriteRegister(reg_addr, value);
     }
 

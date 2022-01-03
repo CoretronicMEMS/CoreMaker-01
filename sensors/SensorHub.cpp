@@ -165,7 +165,7 @@ namespace CMC
                 if (flags & SENSOR_EVENT(SENSOR_BME680))
                 {
                     sensors[SENSOR_BME680]->Read(&bme680_sensor_data, sizeof(bme680_sensor_data));
-                    printf("%.2f, %.2f, %.2f, %.2f\n", bme680_sensor_data[0], bme680_sensor_data[1], bme680_sensor_data[2], bme680_sensor_data[3]);
+                    printf("bme680_sensor_data: %.2f, %.2f, %.2f, %.2f\n", bme680_sensor_data[0], bme680_sensor_data[1], bme680_sensor_data[2], bme680_sensor_data[3]);
                 }
                 if (flags & SENSOR_EVENT(SENSOR_GMC306))
                 {
@@ -175,6 +175,7 @@ namespace CMC
                 if (flags & SENSOR_EVENT(SENSOR_KX122))
                 {
                     sensors[SENSOR_KX122]->Read(&kx122_data, sizeof(kx122_data));
+                    printf("kx122_data: %.2f, %.2f, %.2f\n", kx122_data[0], kx122_data[1], kx122_data[2]);
                 }
                 if (flags & SW_EVENT)
                 {
