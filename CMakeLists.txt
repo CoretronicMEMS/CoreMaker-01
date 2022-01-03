@@ -35,6 +35,7 @@ target_sources(${APP_TARGET}
     PRIVATE
         main.cpp
         DebounceIn.cpp
+        lightEffect.hpp
         sensors/ADS131E.cpp
         sensors/GMC306.cpp
         sensors/AcousticNode.cpp

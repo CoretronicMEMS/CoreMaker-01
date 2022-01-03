@@ -7,12 +7,13 @@
 #include "NuSDBlockDevice.h"
 #include "FATFileSystem.h"
 #include "DebounceIn.h"
+#include "lightEffect.hpp"
 
 
 using namespace CMC;
 
 SensorHub sensorHub;
-DigitalOut led_r(LED_RED);
+LightEffect led_r(LED_RED);
 DigitalOut led_g(LED_GREEN);
 DigitalOut led_b(LED_BLUE);
 DebounceIn sw2(SW2, PullUp);
@@ -22,13 +23,15 @@ USBCDC serial(false);
 
 int main()
 {
-    led_r = 0;
+    led_r.Off();
     led_b = 1;
     printf("\nMbed OS version - %d.%d.%d\n\n", MBED_MAJOR_VERSION, MBED_MINOR_VERSION, MBED_PATCH_VERSION);
 
     serial.connect();
     sensorHub.Start();
 
+    led_r.Period(2);
+    led_r.On();
     while (1)
     {
         ThisThread::sleep_for(chrono::milliseconds(1000));

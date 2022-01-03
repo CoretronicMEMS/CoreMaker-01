@@ -111,10 +111,12 @@ namespace CMC
             case SENSOR_CTRL_START:
                 DBG_MSG("SensorHub: sensor%d %s on\n", sensor_id, sensors[sensor_id]->Name());
                 m_SensorStart = true;
+                led_b = !m_SensorStart;
                 return sensors[sensor_id]->Control(control, arg);
             case SENSOR_CTRL_STOP:
                 DBG_MSG("SensorHub: sensor%d %s off\n", sensor_id, sensors[sensor_id]->Name());
                 m_SensorStart = false;
+                led_b = !m_SensorStart;
                 return sensors[sensor_id]->Control(control, arg);
             case SENSOR_CTRL_SET_ODR:
                 return SetODR(sensor_id, arg);
@@ -200,14 +202,11 @@ namespace CMC
         if (m_SensorStart)
         {
             Control(m_SensorSel, SENSOR_CTRL_STOP);
-            m_SensorStart = false;
         }
         else
         {
             m_SensorSel = (SensorType)GetSwitchSelect();
             Control(m_SensorSel, SENSOR_CTRL_START);
-            m_SensorStart = true;
         }
-        led_b = !m_SensorStart;
     }
 }
