@@ -37,7 +37,7 @@ private:
     I2C *m_I2CDev;
     bool m_isOn = false;
     int32_t m_SensorData[GMC306_ADC_CHANNELS];
-    Timeout m_timer;
+    Ticker m_timer;
     int m_PID;
     int m_ODR;
     uint8_t m_OdrReg;

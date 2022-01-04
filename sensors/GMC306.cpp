@@ -204,9 +204,6 @@ void GMC306::TimerCallback()
     // I2C operation can't use in ISR
     // just send event to sensor hub, let it perform I2C transmission
     SetDataReady();
-
-    if(m_isOn)
-        m_timer.attach(callback(this, &GMC306::TimerCallback), std::chrono::milliseconds((int)(1000/m_ODR)));
 }
 
 }; //namespace CMC
