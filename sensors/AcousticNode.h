@@ -24,18 +24,20 @@ public:
     int32_t Read(void *data, uint32_t num) override final;
     int32_t Control(uint32_t control, uint32_t arg) override final;
     virtual const char* Name() { return "spu0410"; }
-    void DRDY_ISR();
 
 private:
     int32_t ReadData(int32_t *data, uint32_t num);
     int32_t SetODR(uint32_t arg);
     int32_t SetGain(uint32_t arg);
     int32_t SelftTest();
+    void TimerCallback();
 
 private:
-    uint32_t m_intCount;
+    bool m_isOn = false;
+    int32_t m_ADCData;
     uint32_t m_ODR;
     uint32_t m_gain = 1;
+    Ticker m_timer;
 
     AnalogIn AUDIO_DATA;
 };
