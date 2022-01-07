@@ -35,6 +35,13 @@ enum SensorType
     SENSOR_MAX
 };
 
+enum DCL_ConnStatus
+{
+    DCL_DISCONNECT,
+    DCL_CONNECTING,
+    DCL_CONNECTED,
+};
+
 #define SENSOR_EVENT(id)    (1<<id)
 
 class Sensor {
@@ -44,8 +51,15 @@ public:
     virtual ~Sensor() = default;
     virtual int32_t Initialize() = 0;
     virtual int32_t Uninitialize() = 0;
-    virtual int32_t Write(const void *data, uint32_t num) = 0;
-    virtual int32_t Read(void *data, uint32_t num) = 0;
+    virtual int32_t Write(const void *data, size_t num) = 0;
+    /**
+     * @brief read sensor data
+     * 
+     * @param data data buffer
+     * @param num data buffer length in byte
+     * @return int32_t received data length in byte
+     */
+    virtual int32_t Read(void *data, size_t num) = 0;
     virtual int32_t Control(uint32_t control, uint32_t arg) = 0;
     virtual const char* Name() { return ""; }
 
@@ -80,7 +94,7 @@ public:
     virtual ~SensorHub() = default;
 
     void Start();
-    int32_t Control(SensorType sensor_id, uint32_t control, uint32_t arg);
+    int32_t Control(SensorType sensor_id, uint32_t control, uint32_t arg = 0);
     uint32_t SetODR(SensorType sensor_id, uint32_t odr);
 
     static Sensor* sensors[];
@@ -88,14 +102,21 @@ public:
 protected:
     void Initial();
     void HubTask();
+    void SW3_ISR();
+    void SwitchChanged();
     void SW2PressISR();
     void ButtonPress();
+    void SerialReceiveISR();
+    void onCharReceived();
+    void JsonGenerator();
 
     Thread m_thread;
     EventFlags sensorEvent;
     EventFlags m_SwEvent;
     SensorType m_SensorSel;
     bool m_SensorStart = 0;
+    DCL_ConnStatus m_DCLStatus = DCL_DISCONNECT;
+    int16_t m_dataBuffer[1024];
 };
 
 

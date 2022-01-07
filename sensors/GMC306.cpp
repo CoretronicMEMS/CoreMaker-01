@@ -6,7 +6,7 @@
 #define GMC306_ADDRESS      (0x0C<<1)
 #define GMC306_PID          0x13
 #define GMC306A_PID         0x43
-#define DEFAULT_ODR         10
+
 
 // GMC306 registers
 #define REG_ID              0x50
@@ -38,7 +38,7 @@ const static Config_to_Reg gmc306_odr_list[] =
     { 200, 0x0C}
 };
 
-GMC306::GMC306(I2C *i2c_dev) : m_I2CDev(i2c_dev)
+GMC306::GMC306(I2C *i2c_dev, int odr) : m_I2CDev(i2c_dev), m_ODR(odr)
 {
 
 }
@@ -52,15 +52,15 @@ int32_t GMC306::Initialize()
 {
     ThisThread::sleep_for(std::chrono::milliseconds(10));
 
-    //wait_us(10);
-
 	m_PID = ReadOneRegister(REG_ID);
-    DBG_MSG("Probe gmc306: 0x%02X\n", m_PID);
+    //DBG_MSG("Probe gmc306: 0x%02X\n", m_PID);
 
-    WriteOneRegister(REG_CNTL2, 1);
+    WriteOneRegister(REG_CNTL2, 1); // reset
     ThisThread::sleep_for(std::chrono::milliseconds(10));
 
-    SetODR(DEFAULT_ODR);
+    SetODR(m_ODR);
+
+    DBG_MSG("%s initialized\n", Name());
 
     return 0;
 }
@@ -70,17 +70,19 @@ int32_t GMC306::Uninitialize()
     return 0;
 }
 
-int32_t GMC306::Write(const void *data, uint32_t num)
+int32_t GMC306::Write(const void *data, size_t num)
 {
     return 0;
 }
 
-int32_t GMC306::Read(void *data, uint32_t num)
+int32_t GMC306::Read(void *data, size_t num)
 {
     ReadData(m_SensorData, GMC306_ADC_CHANNELS);
-    memcpy(data, m_SensorData, num<sizeof(m_SensorData)?num:sizeof(m_SensorData));
 
-    return 0;
+    int32_t recvLen = num<sizeof(m_SensorData)?num:sizeof(m_SensorData);
+    memcpy(data, m_SensorData, recvLen);
+
+    return recvLen;
 }
 
 int32_t GMC306::Control(uint32_t control, uint32_t arg)
@@ -114,7 +116,7 @@ int32_t GMC306::Control(uint32_t control, uint32_t arg)
     }
     else if(control == SENSOR_CTRL_GET_ODR)
     {
-        return m_ODR;
+        *((uint32_t*)arg) = m_ODR;
     }
     else if(control == SENSOR_CTRL_SET_GAIN)
     {
@@ -125,16 +127,17 @@ int32_t GMC306::Control(uint32_t control, uint32_t arg)
     return 0;
 }
 
-int32_t GMC306::ReadData(int32_t *data, int num)
+int32_t GMC306::ReadData(int16_t *data, size_t num)
 {
     uint8_t buf[6];
 
     ReadRegisters(REG_HXH, sizeof(buf), buf);
     
-    for(int i=0; i<GMC306_ADC_CHANNELS && i<num; i++)
+    uint i;
+    for(i=0; i<GMC306_ADC_CHANNELS && i<num; i++)
         data[i] = (int16_t)((buf[i*2+0]<<8) | buf[i*2+1]);
 
-    return GMC306_ADC_CHANNELS;
+    return i;
 }
 
 int32_t GMC306::ReadRegisters(uint8_t reg_addr, uint8_t num, uint8_t *data)

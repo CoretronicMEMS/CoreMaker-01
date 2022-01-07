@@ -6,26 +6,32 @@
 #include "KX122.h"
 #include "GMC306.h"
 #include "DebounceIn.h"
+#include "jWrite.h"
+#include "libsensiml/kb.h"
+#include "libsensiml/kb_defines.h"
+#include "libsensiml/kb_debug.h"
 
 extern DigitalOut led_r;
 extern DigitalOut led_g;
 extern DigitalOut led_b;
 extern DebounceIn sw2;
-extern DigitalIn sw3_2;
-extern DigitalIn sw3_3;
-extern USBCDC serial;
+extern DebounceIn sw3_2;
+extern DebounceIn sw3_3;
 
-#define SW_EVENT    0x8000
+#define SW2_EVENT       0x8000
+#define SW3_EVENT       0x4000
+#define UART_EVENT      0x2000
 
 namespace CMC
 {
     SPI spi0(PA_0, PA_1, PA_2, PA_3, mbed::use_gpio_ssel);
     I2C i2c1(I2C_SDA, I2C_SCL);
+    USBSerial serial(false);
 
-    AcousticNode acoustic_node(PB_6, 48000);
+    AcousticNode acoustic_node(PB_6, 2000);
     BME680 bme680(0x76 << 1, &i2c1);
-    GMC306 gmc306(&i2c1);
-    KX122 kx122(&spi0, PA_10);
+    GMC306 gmc306(&i2c1, 10);
+    KX122 kx122(&spi0, PA_10, 800);
 
     int32_t adc_data[6];
     float bme680_sensor_data[4];
@@ -63,11 +69,23 @@ namespace CMC
      */
     void SensorHub::Initial()
     {
+        serial.connect();
+        serial.attach(this, &SensorHub::SerialReceiveISR);
+    
         for (uint32_t i = 0; i < ARRAY_SIZE(sensors); i++)
         {
             sensors[i]->Initialize();
             sensors[i]->SetAsyncEvent(&sensorEvent, SENSOR_EVENT(i));
         }
+
+        m_SensorSel = (SensorType)GetSwitchSelect();
+        DBG_MSG("Sensor select %d: %s\n", m_SensorSel, sensors[m_SensorSel]->Name());
+    
+        sw3_2.fall(callback(this, &SensorHub::SW3_ISR));
+        sw3_2.rise(callback(this, &SensorHub::SW3_ISR));
+        sw3_3.fall(callback(this, &SensorHub::SW3_ISR));
+        sw3_3.rise(callback(this, &SensorHub::SW3_ISR));
+        sw2.fall(callback(this, &SensorHub::SW2PressISR));
     }
 
     /**
@@ -102,7 +120,7 @@ namespace CMC
      *@param arg        command related parameters
      *@return int32_t   execution result
      */
-    int32_t SensorHub::Control(SensorType sensor_id, uint32_t control, uint32_t arg = 0)
+    int32_t SensorHub::Control(SensorType sensor_id, uint32_t control, uint32_t arg)
     {
         if (sensor_id < SENSOR_MAX)
         {
@@ -112,6 +130,7 @@ namespace CMC
                 DBG_MSG("SensorHub: sensor%d %s on\n", sensor_id, sensors[sensor_id]->Name());
                 m_SensorStart = true;
                 led_b = !m_SensorStart;
+                JsonGenerator();
                 return sensors[sensor_id]->Control(control, arg);
             case SENSOR_CTRL_STOP:
                 DBG_MSG("SensorHub: sensor%d %s off\n", sensor_id, sensors[sensor_id]->Name());
@@ -140,61 +159,85 @@ namespace CMC
     }
 
     /**
-     * @brief Sensor hub thread
+     * @brief Sensor hub event receiver thread
      * 
      */
     void SensorHub::HubTask()
     {
         Initial();
 
-        m_SensorSel = (SensorType)GetSwitchSelect();
-        DBG_MSG("Sensor select: %d\n", m_SensorSel);
-        Control(m_SensorSel, SENSOR_CTRL_START);
-    
-        sw2.fall(callback(this, &SensorHub::SW2PressISR));
-
-        int count = 0;
         while (true)
         {
             uint flags = sensorEvent.wait_any(0xFFFF, 100);
             if (!(flags & osFlagsError))
             {
+                int m_dataLen = 0;
                 if (flags & SENSOR_EVENT(SENSOR_ACOUSTIC_NODE))
                 {
-                    sensors[SENSOR_ACOUSTIC_NODE]->Read(&adc_data, sizeof(adc_data));
-                    //printf("%ld, %ld, %ld, %ld, %ld, %ld\n", adc_data[0], adc_data[1], adc_data[2], adc_data[3], adc_data[4], adc_data[5]);
+                    m_dataLen = sensors[SENSOR_ACOUSTIC_NODE]->Read(m_dataBuffer, sizeof(m_dataBuffer));
+                    //printf("mic: %d\n", m_dataBuffer[0]);
                 }
                 if (flags & SENSOR_EVENT(SENSOR_BME680))
                 {
-                    sensors[SENSOR_BME680]->Read(&bme680_sensor_data, sizeof(bme680_sensor_data));
+                    m_dataLen = sensors[SENSOR_BME680]->Read(&bme680_sensor_data, sizeof(bme680_sensor_data));
                     printf("bme680_sensor_data: %.2f, %.2f, %.2f, %.2f\n", bme680_sensor_data[0], bme680_sensor_data[1], bme680_sensor_data[2], bme680_sensor_data[3]);
                 }
                 if (flags & SENSOR_EVENT(SENSOR_GMC306))
                 {
-                    sensors[SENSOR_GMC306]->Read(&magnet_data, sizeof(magnet_data));
-                    printf("magnet: %d, %d, %d\n", magnet_data[0], magnet_data[1], magnet_data[2]);
+                    m_dataLen = sensors[SENSOR_GMC306]->Read(m_dataBuffer, sizeof(m_dataBuffer));
+                    //printf("magnet: %d, %d, %d\n", m_dataBuffer[0], m_dataBuffer[1], m_dataBuffer[2]);
                 }
                 if (flags & SENSOR_EVENT(SENSOR_KX122))
                 {
-                    sensors[SENSOR_KX122]->Read(&kx122_data, sizeof(kx122_data));
-                    printf("kx122_data: %.2f, %.2f, %.2f\n", kx122_data[0], kx122_data[1], kx122_data[2]);
+                    m_dataLen = sensors[SENSOR_KX122]->Read(m_dataBuffer, sizeof(m_dataBuffer));
+                    //printf("kx122_data: %d, %d, %d\n", m_dataBuffer[0], m_dataBuffer[1], m_dataBuffer[2]);
                 }
-                if (flags & SW_EVENT)
-                {
+                if (flags & SW3_EVENT)
+                    SwitchChanged();
+                if (flags & SW2_EVENT)
                     ButtonPress();
+                if (flags & UART_EVENT)
+                    onCharReceived();
+
+                if(m_DCLStatus == DCL_CONNECTED && m_SensorStart && m_dataLen)
+                {
+                    serial.write(m_dataBuffer, m_dataLen);
                 }
                 led_g = !led_g;
             }
             else if (flags == osFlagsErrorTimeout) // No event
             {
                 led_g = 1;
+                if(m_DCLStatus == DCL_CONNECTING)
+                    JsonGenerator();
             }
+        }
+    }
+
+    void SensorHub::SW3_ISR()
+    {
+        sensorEvent.set(SW3_EVENT);
+    }
+
+    void SensorHub::SwitchChanged()
+    {
+        SensorType newSel = (SensorType)GetSwitchSelect();
+        if(newSel != m_SensorSel)
+        {
+            if (m_SensorStart)
+            {
+                Control(m_SensorSel, SENSOR_CTRL_STOP);
+                m_DCLStatus = DCL_DISCONNECT;
+            }
+
+            m_SensorSel = (SensorType)GetSwitchSelect();
+            DBG_MSG("Sensor select %d: %s\n", m_SensorSel, sensors[m_SensorSel]->Name());
         }
     }
 
     void SensorHub::SW2PressISR()
     {
-        sensorEvent.set(SW_EVENT);
+        sensorEvent.set(SW2_EVENT);
     }
 
     void SensorHub::ButtonPress()
@@ -202,11 +245,93 @@ namespace CMC
         if (m_SensorStart)
         {
             Control(m_SensorSel, SENSOR_CTRL_STOP);
+            m_DCLStatus = DCL_DISCONNECT;
+        }
+        else if(m_DCLStatus == DCL_CONNECTING)
+        {
+            m_DCLStatus = DCL_DISCONNECT;
         }
         else
         {
             m_SensorSel = (SensorType)GetSwitchSelect();
-            Control(m_SensorSel, SENSOR_CTRL_START);
+            m_DCLStatus = DCL_CONNECTING;
         }
     }
+
+    void SensorHub::SerialReceiveISR()
+    {
+        sensorEvent.set(UART_EVENT);
+    }
+
+    void SensorHub::onCharReceived()
+    {
+        char u8InChar[100];
+        int recvLen = 0;
+        while(serial.readable())
+        {
+            recvLen += serial.read(u8InChar, serial.available());
+        }
+        u8InChar[recvLen] = 0;
+        printf("%s\n", u8InChar);
+
+        if (strcmp(u8InChar, "connect") == 0)
+        {
+            m_DCLStatus = DCL_CONNECTED;
+            Control(m_SensorSel, SENSOR_CTRL_START);
+        }
+        else if (strcmp(u8InChar, "disconnect") == 0)
+        {
+            if (m_SensorStart)
+                Control(m_SensorSel, SENSOR_CTRL_STOP);
+            m_DCLStatus = DCL_DISCONNECT;
+        }
+    }
+
+    void SensorHub::JsonGenerator()
+    {
+        char json_string[1024];
+        struct jWriteControl jwc;
+        jwOpen(&jwc, json_string, sizeof(json_string), JW_OBJECT, JW_COMPACT); // open root node as object
+
+        uint32_t new_odr;
+        sensors[m_SensorSel]->Control(SENSOR_CTRL_GET_ODR, (uint32_t)&new_odr);
+
+        jwObj_int(&jwc, "sample_rate", new_odr);
+        jwObj_int(&jwc, "version", 1);
+        if(m_SensorSel == SENSOR_ACOUSTIC_NODE)
+            jwObj_int(&jwc, "samples_per_packet", 1);
+        else if(m_SensorSel == SENSOR_BME680)
+            jwObj_int(&jwc, "samples_per_packet", 4);
+        else if(m_SensorSel == SENSOR_KX122 || m_SensorSel == SENSOR_GMC306)
+            jwObj_int(&jwc, "samples_per_packet", 3);
+        jwObj_object(&jwc, "column_location"); // object in the root object
+        switch (m_SensorSel)
+        {
+        case SENSOR_ACOUSTIC_NODE:
+            jwObj_int(&jwc, "Microphone", 0);
+            break;
+        case SENSOR_BME680:
+            jwObj_int(&jwc, "Temperature", 0);
+            jwObj_int(&jwc, "Pressure", 1);
+            jwObj_int(&jwc, "Humidity", 2);
+            jwObj_int(&jwc, "Gas resistance", 3);
+            break;
+        case SENSOR_KX122:
+            jwObj_int(&jwc, "AccelerometerX", 0);
+            jwObj_int(&jwc, "AccelerometerY", 1);
+            jwObj_int(&jwc, "AccelerometerZ", 2);
+            break;
+        case SENSOR_GMC306:
+            jwObj_int(&jwc, "MagnetX", 0);
+            jwObj_int(&jwc, "MagnetY", 1);
+            jwObj_int(&jwc, "MagnetZ", 2);
+            break;
+        default:
+            break;
+        }
+        jwEnd(&jwc);             // end the object
+        int err = jwClose(&jwc); // close root object - done
+        serial.printf("%s\n", json_string);
+    }
+
 }

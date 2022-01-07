@@ -42,6 +42,8 @@ namespace CMC
         if (result != BME680_OK)
             return -1;
 
+        DBG_MSG("%s initialized\n", Name());
+
         return 0;
     }
 
@@ -50,12 +52,12 @@ namespace CMC
         return 0;
     }
 
-    int32_t BME680::Write(const void *data, uint32_t num)
+    int32_t BME680::Write(const void *data, size_t num)
     {
         return 0;
     }
 
-    int32_t BME680::Read(void *data, uint32_t num)
+    int32_t BME680::Read(void *data, size_t num)
     {
         return ReadData((float *)data, num);
     }

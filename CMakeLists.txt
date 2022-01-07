@@ -36,6 +36,7 @@ target_sources(${APP_TARGET}
         main.cpp
         DebounceIn.cpp
         lightEffect.hpp
+        jWrite.c
         sensors/ADS131E.cpp
         sensors/GMC306.cpp
         sensors/AcousticNode.cpp

@@ -27,9 +27,10 @@ namespace CMC
             {25600, KX122_ODCNTL_OSA_25600},
     };
 
-    KX122::KX122(SPI *spi_obj, PinName drdy_pin)
+    KX122::KX122(SPI *spi_obj, PinName drdy_pin, int odr)
         : spi_bus(spi_obj),
-          DRDY_PIN(drdy_pin)
+          DRDY_PIN(drdy_pin),
+          m_ODR(odr)
     {
         spi_bus->frequency(10000000); //10MHz
         spi_bus->format(8, 0);
@@ -70,7 +71,7 @@ namespace CMC
             // printf("KX122_BUF_CNTL2 = 0x%X\n", SPIReadRegister(KX122_BUF_CNTL2));
 
             //ODCNTL: Output Data Rate control (ODR)
-            SetODR(25600);
+            SetODR(m_ODR);
             // printf("KX122_ODCNTL = 0x%x\n", SPIReadRegister(KX122_ODCNTL));
 
             //Setup G-range and 8/16-bit resolution + set CNTL1 PC1-bit to operating mode (also WUF_EN, TP_EN and DT_EN)
@@ -81,6 +82,7 @@ namespace CMC
             //resolution_divider = 32768/4;  //KX122_CNTL1_GSEL_4G
             resolution_divider = 32768 / 8; //KX122_CNTL1_GSEL_8G
 
+            DBG_MSG("%s initialized\n", Name());
             return 0;
         }
         else
@@ -98,16 +100,20 @@ namespace CMC
         return 0;
     }
 
-    int32_t KX122::Write(const void *data, uint32_t num)
+    int32_t KX122::Write(const void *data, size_t num)
     {
         return 0;
     }
 
-    int32_t KX122::Read(void *data, uint32_t num)
+    int32_t KX122::Read(void *data, size_t num)
     {
-        ReadData((float *)data);
+        int16_t buf[3];
+        ReadData(buf);
 
-        return 0;
+        int32_t len = num<sizeof(buf)?num:sizeof(buf);
+        memcpy(data, buf, len);
+
+        return len;
     }
 
     int32_t KX122::Control(uint32_t control, uint32_t arg)
@@ -197,9 +203,8 @@ namespace CMC
         return 0;
     }
 
-    void KX122::ReadData(float *buf)
+    void KX122::ReadData(int16_t *buf)
     {
-        int16_t xyz[3];
         uint8_t tmp[6]; //XYZ (lhlhlh)
 
         tmp[0] = SPIReadRegister(KX122_XOUT_L);
@@ -209,13 +214,9 @@ namespace CMC
         tmp[4] = SPIReadRegister(KX122_ZOUT_L);
         tmp[5] = SPIReadRegister(KX122_ZOUT_H);
 
-        xyz[0] = (tmp[1] << 8) | tmp[0];
-        xyz[1] = (tmp[3] << 8) | tmp[2];
-        xyz[2] = (tmp[5] << 8) | tmp[4];
-
-        buf[0] = (float)xyz[0] / resolution_divider; //X
-        buf[1] = (float)xyz[1] / resolution_divider; //Y
-        buf[2] = (float)xyz[2] / resolution_divider; //Z
+        buf[0] = (tmp[1] << 8) | tmp[0];
+        buf[1] = (tmp[3] << 8) | tmp[2];
+        buf[2] = (tmp[5] << 8) | tmp[4];
     }
 
     uint8_t KX122::SPIReadRegister(uint8_t reg_addr)

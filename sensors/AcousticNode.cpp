@@ -22,6 +22,7 @@ int32_t AcousticNode::Initialize()
 {
     SetODR(m_ODR);
     SetGain(1);
+    DBG_MSG("%s initialized\n", Name());
     return 0;
 }
 
@@ -30,22 +31,28 @@ int32_t AcousticNode::Uninitialize()
     return 0;
 }
 
-int32_t AcousticNode::Write(const void *data, uint32_t num)
+int32_t AcousticNode::Write(const void *data, size_t num)
 {
     return 0;
 }
 
-int32_t AcousticNode::Read(void *data, uint32_t num)
+int32_t AcousticNode::Read(void *data, size_t num)
 {
-    ReadData((int32_t*)data, num);
-    return 0;
+    uint16_t buf;
+    ReadData(&buf, 2);
+
+    int temp = buf;
+    temp -= 0x7FFF;
+    ((int16_t*)data)[0] = temp;
+
+    return 2;
 }
 
 int32_t AcousticNode::Control(uint32_t control, uint32_t arg)
 {
     if(control == SENSOR_CTRL_START)
     {
-        m_timer.attach(callback(this, &AcousticNode::TimerCallback), std::chrono::milliseconds((int)(1000/m_ODR)));
+        m_timer.attach(callback(this, &AcousticNode::TimerCallback), std::chrono::microseconds((int)(1000000/m_ODR)));
         m_isOn = true;
     }
     else if(control == SENSOR_CTRL_STOP)
@@ -59,7 +66,7 @@ int32_t AcousticNode::Control(uint32_t control, uint32_t arg)
             m_timer.detach();
         int32_t odr = SetODR(arg);
         if(m_isOn)
-            m_timer.attach(callback(this, &AcousticNode::TimerCallback), std::chrono::milliseconds((int)(1000/m_ODR)));
+            m_timer.attach(callback(this, &AcousticNode::TimerCallback), std::chrono::microseconds((int)(1000000/m_ODR)));
         return odr;
     }
     else if(control == SENSOR_CTRL_SELFTEST)
@@ -78,12 +85,12 @@ int32_t AcousticNode::Control(uint32_t control, uint32_t arg)
     return 0;
 }
 
-int32_t AcousticNode::ReadData(int32_t *data, uint32_t num)
+int32_t AcousticNode::ReadData(uint16_t *data, uint32_t num)
 {
-    uint16_t adc = AUDIO_DATA.read_u16();
-    data[0] = adc;
-
-    return 1;
+    if(num < 2)
+        return 0;
+    data[0] = AUDIO_DATA.read_u16();
+    return 2;
 }
 
 int32_t AcousticNode::SetODR(uint32_t arg)

@@ -146,12 +146,12 @@ int32_t ADS131E::Uninitialize()
     return 0;
 }
 
-int32_t ADS131E::Write(const void *data, uint32_t num)
+int32_t ADS131E::Write(const void *data, size_t num)
 {
     return 0;
 }
 
-int32_t ADS131E::Read(void *data, uint32_t num)
+int32_t ADS131E::Read(void *data, size_t num)
 {
     ReadData((int32_t*)data, num);
 

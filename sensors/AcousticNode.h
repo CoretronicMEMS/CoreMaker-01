@@ -20,13 +20,13 @@ public:
     ~AcousticNode() override;
     int32_t Initialize() override final;
     int32_t Uninitialize() override final;
-    int32_t Write(const void *data, uint32_t num) override final;
-    int32_t Read(void *data, uint32_t num) override final;
+    int32_t Write(const void *data, size_t num) override final;
+    int32_t Read(void *data, size_t num) override final;
     int32_t Control(uint32_t control, uint32_t arg) override final;
     virtual const char* Name() { return "spu0410"; }
 
 private:
-    int32_t ReadData(int32_t *data, uint32_t num);
+    int32_t ReadData(uint16_t *data, uint32_t num);
     int32_t SetODR(uint32_t arg);
     int32_t SetGain(uint32_t arg);
     int32_t SelftTest();
