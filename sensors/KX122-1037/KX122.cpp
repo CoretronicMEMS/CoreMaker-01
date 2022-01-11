@@ -48,7 +48,7 @@ namespace CMC
 
     int32_t KX122::Initialize()
     {
-        DRDY_PIN.rise(callback(this, &KX122::DRDY_ISR));
+        DRDY_PIN.fall(callback(this, &KX122::DRDY_ISR));
         uint8_t buf;
         buf = SPIReadRegister(KX122_WHO_AM_I);
         if (buf == KX122_WHO_AM_I_WAI_ID)
@@ -108,9 +108,10 @@ namespace CMC
     int32_t KX122::Read(void *data, size_t num)
     {
         int16_t buf[3];
-        ReadData(buf);
+        // ReadData(buf);
+        BurstReadData(buf);
 
-        int32_t len = num<sizeof(buf)?num:sizeof(buf);
+        int32_t len = num < sizeof(buf) ? num : sizeof(buf);
         memcpy(data, buf, len);
 
         return len;
@@ -213,6 +214,25 @@ namespace CMC
         tmp[3] = SPIReadRegister(KX122_YOUT_H);
         tmp[4] = SPIReadRegister(KX122_ZOUT_L);
         tmp[5] = SPIReadRegister(KX122_ZOUT_H);
+
+        buf[0] = (tmp[1] << 8) | tmp[0];
+        buf[1] = (tmp[3] << 8) | tmp[2];
+        buf[2] = (tmp[5] << 8) | tmp[4];
+    }
+
+    void KX122::BurstReadData(int16_t *buf)
+    {
+        uint8_t tmp[6]; //XYZ (lhlhlh)
+        spi_bus->select();
+        spi_bus->write(CMD_RREG | KX122_XOUT_L);
+        tmp[0] = spi_bus->write(0x00);
+        tmp[1] = spi_bus->write(0x00);
+        tmp[2] = spi_bus->write(0x00);
+        tmp[3] = spi_bus->write(0x00);
+        tmp[4] = spi_bus->write(0x00);
+        tmp[5] = spi_bus->write(0x00);
+        spi_bus->deselect();
+        // spi_bus->clear_transfer_buffer();
 
         buf[0] = (tmp[1] << 8) | tmp[0];
         buf[1] = (tmp[3] << 8) | tmp[2];

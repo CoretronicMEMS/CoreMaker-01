@@ -7,9 +7,9 @@
 #include "GMC306.h"
 #include "DebounceIn.h"
 #include "jWrite.h"
-#include "libsensiml/kb.h"
-#include "libsensiml/kb_defines.h"
-#include "libsensiml/kb_debug.h"
+// #include "libsensiml/kb.h"
+// #include "libsensiml/kb_defines.h"
+// #include "libsensiml/kb_debug.h"
 
 extern DigitalOut led_r;
 extern DigitalOut led_g;
