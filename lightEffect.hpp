@@ -48,3 +48,52 @@ protected:
     int m_flashFreq = 100;
     Timeout m_timer;
 };
+
+class FlashLED : DigitalOut
+{
+public:
+    FlashLED(PinName pin, int on = 0) : DigitalOut(pin)
+    {
+        write(!on);
+    }
+    ~FlashLED() = default;
+
+    void Flash(int ms = 50)
+    {
+        if(m_ledStatus == 0)
+        {
+            m_ledStatus = 2;
+            (*this) = 1;
+            m_flashTimer.attach(callback(this, &FlashLED::TimerCallback), std::chrono::milliseconds(ms));
+        }
+    }
+
+    void TimerCallback()
+    {
+        if(m_ledStatus == 2)
+        {
+            m_flashTimer.attach(callback(this, &FlashLED::TimerCallback), std::chrono::milliseconds(50));
+            m_ledStatus = 1;
+            (*this) = 0;
+        }
+        else
+        {
+            m_ledStatus = 0;
+        }
+    }
+
+    FlashLED &operator= (int value)
+    {
+        write(!value);
+        return *this;
+    }
+
+    operator int()
+    {
+        return !read();
+    }
+
+private:
+    Timeout m_flashTimer;
+    int m_ledStatus;
+};

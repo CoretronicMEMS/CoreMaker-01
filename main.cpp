@@ -13,8 +13,8 @@ using namespace CMC;
 
 SensorHub sensorHub;
 LightEffect led_r(LED_RED);
-DigitalOut led_g(LED_GREEN);
-DigitalOut led_b(LED_BLUE);
+FlashLED led_g(LED_GREEN);
+FlashLED led_b(LED_BLUE);
 DebounceIn sw2(SW2, PullUp);
 DebounceIn sw3_2(SW3_2);
 DebounceIn sw3_3(SW3_3);
@@ -23,7 +23,6 @@ DebounceIn sw3_3(SW3_3);
 int main()
 {
     led_r.Off();
-    led_b = 1;
     printf("\nMbed OS version - %d.%d.%d\n\n", MBED_MAJOR_VERSION, MBED_MINOR_VERSION, MBED_PATCH_VERSION);
 
     sensorHub.Start();

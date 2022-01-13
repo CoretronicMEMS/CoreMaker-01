@@ -6,14 +6,15 @@
 #include "KX122.h"
 #include "GMC306.h"
 #include "DebounceIn.h"
+#include "lightEffect.hpp"
 #include "jWrite.h"
 // #include "libsensiml/kb.h"
 // #include "libsensiml/kb_defines.h"
 // #include "libsensiml/kb_debug.h"
 
-extern DigitalOut led_r;
-extern DigitalOut led_g;
-extern DigitalOut led_b;
+extern LightEffect led_r;
+extern FlashLED led_g;
+extern FlashLED led_b;
 extern DebounceIn sw2;
 extern DebounceIn sw3_2;
 extern DebounceIn sw3_3;
@@ -129,13 +130,13 @@ namespace CMC
             case SENSOR_CTRL_START:
                 DBG_MSG("SensorHub: sensor%d %s on\n", sensor_id, sensors[sensor_id]->Name());
                 m_SensorStart = true;
-                led_b = !m_SensorStart;
+                led_b = m_SensorStart;
                 JsonGenerator();
                 return sensors[sensor_id]->Control(control, arg);
             case SENSOR_CTRL_STOP:
                 DBG_MSG("SensorHub: sensor%d %s off\n", sensor_id, sensors[sensor_id]->Name());
                 m_SensorStart = false;
-                led_b = !m_SensorStart;
+                led_b = m_SensorStart;
                 return sensors[sensor_id]->Control(control, arg);
             case SENSOR_CTRL_SET_ODR:
                 return SetODR(sensor_id, arg);
@@ -168,7 +169,7 @@ namespace CMC
 
         while (true)
         {
-            uint flags = sensorEvent.wait_any(0xFFFF, 100);
+            uint flags = sensorEvent.wait_any(0xFFFF, 1000);
             if (!(flags & osFlagsError))
             {
                 int m_dataLen = 0;
@@ -199,17 +200,26 @@ namespace CMC
                 if (flags & UART_EVENT)
                     onCharReceived();
 
-                if(m_DCLStatus == DCL_CONNECTED && m_SensorStart && m_dataLen)
+                if(m_SensorStart && m_dataLen)
                 {
-                    serial.write(m_dataBuffer, m_dataLen);
+                    if(m_DCLStatus == DCL_CONNECTED)
+                        serial.write(m_dataBuffer, m_dataLen);
                 }
-                led_g = !led_g;
+                led_g.Flash();
             }
             else if (flags == osFlagsErrorTimeout) // No event
             {
-                led_g = 1;
                 if(m_DCLStatus == DCL_CONNECTING)
+                {
                     JsonGenerator();
+                    m_DCLJsonCnt++;
+                    if(m_DCLJsonCnt >= 3)
+                    {
+                        m_DCLJsonCnt = 0;
+                        m_DCLStatus = DCL_DISCONNECT;
+                    }
+                    led_g.Flash();
+                }
             }
         }
     }
@@ -246,15 +256,23 @@ namespace CMC
         {
             Control(m_SensorSel, SENSOR_CTRL_STOP);
             m_DCLStatus = DCL_DISCONNECT;
+            m_DCLJsonCnt = 0;
         }
         else if(m_DCLStatus == DCL_CONNECTING)
         {
             m_DCLStatus = DCL_DISCONNECT;
+            m_DCLJsonCnt = 0;
         }
         else
         {
-            m_SensorSel = (SensorType)GetSwitchSelect();
-            m_DCLStatus = DCL_CONNECTING;
+            if(serial.connected())
+            {
+                m_DCLStatus = DCL_CONNECTING;
+            }
+            else
+            {
+                Control(m_SensorSel, SENSOR_CTRL_START);
+            }
         }
     }
 

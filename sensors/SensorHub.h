@@ -116,6 +116,7 @@ protected:
     SensorType m_SensorSel;
     bool m_SensorStart = 0;
     DCL_ConnStatus m_DCLStatus = DCL_DISCONNECT;
+    int m_DCLJsonCnt = 0;
     int16_t m_dataBuffer[1024];
 };
 
