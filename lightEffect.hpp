@@ -8,6 +8,7 @@ public:
     LightEffect(PinName pin) : m_led(pin)
     {
         m_led.period_ms(1);
+        m_led.write(1.0f);
     };
     ~LightEffect() = default;
 
