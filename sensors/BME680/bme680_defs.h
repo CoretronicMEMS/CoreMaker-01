@@ -93,9 +93,9 @@
 
 /** BME680 configuration macros */
 /** Enable or un-comment the macro to provide floating point data output */
-#ifndef BME680_FLOAT_POINT_COMPENSATION
-#define BME680_FLOAT_POINT_COMPENSATION 
-#endif
+// #ifndef BME680_FLOAT_POINT_COMPENSATION
+// #define BME680_FLOAT_POINT_COMPENSATION
+// #endif
 
 /** BME680 General config */
 #define BME680_POLL_PERIOD_MS		UINT8_C(10)
@@ -372,7 +372,7 @@ struct	bme680_field_data {
 	/*! Measurement index to track order */
 	uint8_t meas_index;
 
-#ifndef BME680_FLOAT_POINT_COMPENSATION
+// #ifndef BME680_FLOAT_POINT_COMPENSATION
 	/*! Temperature in degree celsius x100 */
 	int16_t temperature;
 	/*! Pressure in Pascal */
@@ -381,17 +381,17 @@ struct	bme680_field_data {
 	uint32_t humidity;
 	/*! Gas resistance in Ohms */
 	uint32_t gas_resistance;
-#else
+// #else
 	/*! Temperature in degree celsius */
-	float temperature;
+	float f_temperature;
 	/*! Pressure in Pascal */
-	float pressure;
+	float f_pressure;
 	/*! Humidity in % relative humidity x1000 */
-	float humidity;
+	float f_humidity;
 	/*! Gas resistance in Ohms */
-	float gas_resistance;
+	float f_gas_resistance;
 
-#endif
+// #endif
 
 };
 
@@ -446,13 +446,13 @@ struct	bme680_calib_data {
 	/*! Variable to store calibrated pressure data */
 	uint8_t par_p10;
 
-#ifndef BME680_FLOAT_POINT_COMPENSATION
+// #ifndef BME680_FLOAT_POINT_COMPENSATION
 	/*! Variable to store t_fine size */
 	int32_t t_fine;
-#else
+// #else
 	/*! Variable to store t_fine size */
-	float t_fine;
-#endif
+	float f_t_fine;
+// #endif
 	/*! Variable to store heater resistance range */
 	uint8_t res_heat_range;
 	/*! Variable to store heater resistance value */

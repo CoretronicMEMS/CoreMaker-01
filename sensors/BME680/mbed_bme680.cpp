@@ -59,7 +59,10 @@ namespace CMC
 
     int32_t BME680::Read(void *data, size_t num)
     {
-        return ReadData((float *)data, num);
+        if(bme680_get_data_type() == 0)
+            return ReadInt32Data((int16_t *)data, num);
+        else
+            return ReadData((float *)data, num);
     }
 
     int32_t BME680::Control(uint32_t control, uint32_t arg)
@@ -97,6 +100,10 @@ namespace CMC
         else if (control == SENSOR_CTRL_SET_GAIN)
         {
         }
+        else if(control == BME680_CTRL_SET_OUTPUT_DATA_TYPE)
+        {
+            bme680_set_data_type(arg);
+        }
 
         return 0;
     }
@@ -105,12 +112,34 @@ namespace CMC
     {
         if (performReading())
         {
-            data[0] = bme680_data.temperature;
-            data[1] = bme680_data.pressure;
-            data[2] = bme680_data.humidity;
+            data[0] = bme680_data.f_temperature;
+            data[1] = bme680_data.f_pressure;
+            data[2] = bme680_data.f_humidity;
             if (this->isGasHeatingSetupStable())
             {
-                data[3] = bme680_data.gas_resistance;
+                data[3] = bme680_data.f_gas_resistance;
+            }
+            else
+            {
+                data[3] = 0;
+            }
+
+            return 0;
+        }
+
+        return -1;
+    }
+
+    int32_t BME680::ReadInt32Data(int16_t *data, uint32_t num )
+    {
+        if (performReading())
+        {
+            data[0] = bme680_data.temperature;
+            data[1] = ((bme680_data.pressure) / BME680_PRESSURE_SCALE_VALUE) > INT16_MAX? INT16_MAX : ((bme680_data.pressure) / 5); //change range to int16_t
+            data[2] = ((bme680_data.humidity) / BME680_HUMIDITY_SCALE_VALUE) > INT16_MAX? INT16_MAX : (bme680_data.humidity) / 5 ; //change range to int16_t
+            if (this->isGasHeatingSetupStable())
+            {
+                data[3] =((bme680_data.gas_resistance) / BME680_GAS_SCALE_VALUE) > INT16_MAX? INT16_MAX : ((bme680_data.gas_resistance) / 10); //change range to int16_t
             }
             else
             {

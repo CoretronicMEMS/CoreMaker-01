@@ -209,6 +209,16 @@ int8_t bme680_set_sensor_settings(uint16_t desired_settings, struct bme680_dev *
  * @retval zero -> Success / +ve value -> Warning / -ve value -> Error.
  */
 int8_t bme680_get_sensor_settings(uint16_t desired_settings, struct bme680_dev *dev);
+
+/*!
+ * @brief This API is used to set sensor output data type.
+ *
+ * @param[in] type : sensor output data type, 0 for uint32_t type, 1 for float type.
+ */
+void  bme680_set_data_type(uint32_t  type);
+
+uint32_t  bme680_get_data_type();
+
 #ifdef __cplusplus
 }
 #endif /* End of CPP guard */
