@@ -25,6 +25,9 @@ namespace CMC {
 #define SENSOR_CTRL_GET_ODR            0x13
 #define SENSOR_CTRL_GET_GAIN           0x14
 
+#define SENSORHUB_CTRL_TESTMODE        0x101
+#define SENSORHUB_CTRL_STOPTEST        0x102
+
 
 enum SensorType
 {
@@ -32,7 +35,9 @@ enum SensorType
     SENSOR_BME680,
     SENSOR_KX122,
     SENSOR_GMC306,
-    SENSOR_MAX
+    SENSOR_MAX,
+    SENSOR_TEST,
+    SENSOR_HUB,
 };
 
 enum DCL_ConnStatus
@@ -93,39 +98,36 @@ public:
     SensorHub();
     virtual ~SensorHub() = default;
 
+    void Initial();
     void Start();
     int32_t Control(SensorType sensor_id, uint32_t control, uint32_t arg = 0);
     uint32_t SetODR(SensorType sensor_id, uint32_t odr);
+    void DclConnect(DCL_ConnStatus st);
+    void JsonGenerator();
+    void ButtonPress();
+    void SelectSensor(SensorType sensorId);
+    SensorType SelectedSensor();
 
     static Sensor* sensors[];
 
 protected:
-    void Initial();
     void HubTask();
-    void SW3_ISR();
-    void SwitchChanged();
-    void SW2PressISR();
-    void ButtonPress();
-    void SerialReceiveISR();
-    void onCharReceived();
-    void JsonGenerator();
 
     Thread m_thread;
     EventFlags sensorEvent;
     EventFlags m_SwEvent;
-    SensorType m_SensorSel;
+    SensorType m_SensorSel = SENSOR_MAX;
     bool m_SensorStart = 0;
     DCL_ConnStatus m_DCLStatus = DCL_DISCONNECT;
     int m_DCLJsonCnt = 0;
     int16_t m_dataBuffer[1024];
+    bool m_testMode = false;
 };
 
 
 extern int32_t adc_data[6];
 extern float bme680_sensor_data[4];
 extern float kx122_data[3];
-
-int GetSwitchSelect();
 
 };
 
