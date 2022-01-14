@@ -125,10 +125,6 @@ protected:
 };
 
 
-extern int32_t adc_data[6];
-extern float bme680_sensor_data[4];
-extern float kx122_data[3];
-
 };
 
 #endif

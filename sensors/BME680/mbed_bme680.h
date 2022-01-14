@@ -5,7 +5,10 @@
 #include "mbed.h"
 #include "SensorHub.h"
 
-#define BME680_CTRL_GET_SAMPLE_COUNT 0x102
+#define BME680_HUMIDITY_SCALE_VALUE 5
+#define BME680_PRESSURE_SCALE_VALUE 5
+#define BME680_GAS_SCALE_VALUE 10
+#define BME680_CTRL_SET_OUTPUT_DATA_TYPE 0x101
 
 #define BME680_DEFAULT_ADDRESS (0x77 << 1) // The default I2C address (shifted for MBed 8 bit address)
 // #define BME680_DEBUG_MODE  // Use this for enhance debug logs for I2C and more.
@@ -48,6 +51,7 @@ namespace CMC
 
         int32_t SetPowerMode(uint8_t power_mode);
         int32_t ReadData(float *data, uint32_t num);
+        int32_t ReadInt16Data(int16_t *data, uint32_t num );
         static void log(const char *format, ...);
         bool setTemperatureOversampling(uint8_t os);
         bool setPressureOversampling(uint8_t os);

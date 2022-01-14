@@ -41,6 +41,9 @@
 #include "bme680.h"
 // #include <stdio.h>
 #include "mbed.h"
+
+uint32_t bme680_output_data_type = 0; // default set output data type is uint32_t
+
 /*!
  * @brief This internal API is used to read the calibrated data from the sensor.
  *
@@ -89,7 +92,7 @@ static int8_t get_gas_config(struct bme680_dev *dev);
  */
 static uint8_t calc_heater_dur(uint16_t dur);
 
-#ifndef BME680_FLOAT_POINT_COMPENSATION
+// #ifndef BME680_FLOAT_POINT_COMPENSATION
 
 /*!
  * @brief This internal API is used to calculate the temperature value.
@@ -142,7 +145,7 @@ static uint32_t calc_gas_resistance(uint16_t gas_res_adc, uint8_t gas_range, con
  */
 static uint8_t calc_heater_res(uint16_t temp, const struct bme680_dev *dev);
 
-#else
+// #else
 /*!
  * @brief This internal API is used to calculate the
  * temperature value value in float format
@@ -152,7 +155,7 @@ static uint8_t calc_heater_res(uint16_t temp, const struct bme680_dev *dev);
  *
  * @return Calculated temperature in float
  */
-static float calc_temperature(uint32_t temp_adc, struct bme680_dev *dev);
+static float f_calc_temperature(uint32_t temp_adc, struct bme680_dev *dev);
 
 /*!
  * @brief This internal API is used to calculate the
@@ -163,7 +166,7 @@ static float calc_temperature(uint32_t temp_adc, struct bme680_dev *dev);
  *
  * @return Calculated pressure in float.
  */
-static float calc_pressure(uint32_t pres_adc, const struct bme680_dev *dev);
+static float f_calc_pressure(uint32_t pres_adc, const struct bme680_dev *dev);
 
 /*!
  * @brief This internal API is used to calculate the
@@ -174,7 +177,7 @@ static float calc_pressure(uint32_t pres_adc, const struct bme680_dev *dev);
  *
  * @return Calculated humidity in float.
  */
-static float calc_humidity(uint16_t hum_adc, const struct bme680_dev *dev);
+static float f_calc_humidity(uint16_t hum_adc, const struct bme680_dev *dev);
 
 /*!
  * @brief This internal API is used to calculate the
@@ -186,7 +189,7 @@ static float calc_humidity(uint16_t hum_adc, const struct bme680_dev *dev);
  *
  * @return Calculated gas resistance in float.
  */
-static float calc_gas_resistance(uint16_t gas_res_adc, uint8_t gas_range, const struct bme680_dev *dev);
+static float f_calc_gas_resistance(uint16_t gas_res_adc, uint8_t gas_range, const struct bme680_dev *dev);
 
 /*!
  * @brief This internal API is used to calculate the
@@ -197,9 +200,9 @@ static float calc_gas_resistance(uint16_t gas_res_adc, uint8_t gas_range, const 
  *
  * @return Calculated heater resistance in float.
  */
-static float calc_heater_res(uint16_t temp, const struct bme680_dev *dev);
+static float f_calc_heater_res(uint16_t temp, const struct bme680_dev *dev);
 
-#endif
+// #endif
 
 /*!
  * @brief This internal API is used to calculate the field data of sensor.
@@ -807,9 +810,14 @@ static int8_t set_gas_config(struct bme680_dev *dev)
 
 		if (dev->power_mode == BME680_FORCED_MODE) {
 			reg_addr[0] = BME680_RES_HEAT0_ADDR;
-			reg_data[0] = calc_heater_res(dev->gas_sett.heatr_temp, dev);
 			reg_addr[1] = BME680_GAS_WAIT0_ADDR;
-			reg_data[1] = calc_heater_dur(dev->gas_sett.heatr_dur);
+			if(bme680_output_data_type == 0) {
+				reg_data[0] = calc_heater_res(dev->gas_sett.heatr_temp, dev);
+			} else {
+				reg_data[0] = (uint32_t) f_calc_heater_res(dev->gas_sett.heatr_temp, dev);	
+			}
+		    reg_data[1] = calc_heater_dur(dev->gas_sett.heatr_dur);
+
 			dev->gas_sett.nb_conv = 0;
 		} else {
 			rslt = BME680_W_DEFINE_PWR_MODE;
@@ -858,7 +866,7 @@ static int8_t get_gas_config(struct bme680_dev *dev)
 	return rslt;
 }
 
-#ifndef BME680_FLOAT_POINT_COMPENSATION
+//#ifndef BME680_FLOAT_POINT_COMPENSATION
 
 /*!
  * @brief This internal API is used to calculate the temperature value.
@@ -1013,14 +1021,14 @@ static uint8_t calc_heater_res(uint16_t temp, const struct bme680_dev *dev)
 	return heatr_res;
 }
 
-#else
+// #else
 
 
 /*!
  * @brief This internal API is used to calculate the
  * temperature value in float format
  */
-static float calc_temperature(uint32_t temp_adc, struct bme680_dev *dev)
+static float f_calc_temperature(uint32_t temp_adc, struct bme680_dev *dev)
 {
 	float var1 = 0;
 	float var2 = 0;
@@ -1033,10 +1041,10 @@ static float calc_temperature(uint32_t temp_adc, struct bme680_dev *dev)
 		((float)dev->calib.par_t3 * 16.0f));
 
 	/* t_fine value*/
-	dev->calib.t_fine = (var1 + var2);
+	dev->calib.f_t_fine = (var1 + var2);
 
 	/* compensated temperature data*/
-	calc_temp  = ((dev->calib.t_fine) / 5120.0f);
+	calc_temp  = ((dev->calib.f_t_fine) / 5120.0f);
 
 	return calc_temp;
 }
@@ -1045,14 +1053,14 @@ static float calc_temperature(uint32_t temp_adc, struct bme680_dev *dev)
  * @brief This internal API is used to calculate the
  * pressure value in float format
  */
-static float calc_pressure(uint32_t pres_adc, const struct bme680_dev *dev)
+static float f_calc_pressure(uint32_t pres_adc, const struct bme680_dev *dev)
 {
 	float var1 = 0;
 	float var2 = 0;
 	float var3 = 0;
 	float calc_pres = 0;
 
-	var1 = (((float)dev->calib.t_fine / 2.0f) - 64000.0f);
+	var1 = (((float)dev->calib.f_t_fine / 2.0f) - 64000.0f);
 	var2 = var1 * var1 * (((float)dev->calib.par_p6) / (131072.0f));
 	var2 = var2 + (var1 * ((float)dev->calib.par_p5) * 2.0f);
 	var2 = (var2 / 4.0f) + (((float)dev->calib.par_p4) * 65536.0f);
@@ -1080,7 +1088,7 @@ static float calc_pressure(uint32_t pres_adc, const struct bme680_dev *dev)
  * @brief This internal API is used to calculate the
  * humidity value in float format
  */
-static float calc_humidity(uint16_t hum_adc, const struct bme680_dev *dev)
+static float f_calc_humidity(uint16_t hum_adc, const struct bme680_dev *dev)
 {
 	float calc_hum = 0;
 	float var1 = 0;
@@ -1090,7 +1098,7 @@ static float calc_humidity(uint16_t hum_adc, const struct bme680_dev *dev)
 	float temp_comp;
 
 	/* compensated temperature data*/
-	temp_comp  = ((dev->calib.t_fine) / 5120.0f);
+	temp_comp  = ((dev->calib.f_t_fine) / 5120.0f);
 
 	var1 = (float)((float)hum_adc) - (((float)dev->calib.par_h1 * 16.0f) + (((float)dev->calib.par_h3 / 2.0f)
 		* temp_comp));
@@ -1116,7 +1124,7 @@ static float calc_humidity(uint16_t hum_adc, const struct bme680_dev *dev)
  * @brief This internal API is used to calculate the
  * gas resistance value in float format
  */
-static float calc_gas_resistance(uint16_t gas_res_adc, uint8_t gas_range, const struct bme680_dev *dev)
+static float f_calc_gas_resistance(uint16_t gas_res_adc, uint8_t gas_range, const struct bme680_dev *dev)
 {
 	float calc_gas_res;
 	float var1 = 0;
@@ -1144,7 +1152,7 @@ static float calc_gas_resistance(uint16_t gas_res_adc, uint8_t gas_range, const 
  * @brief This internal API is used to calculate the
  * heater resistance value in float format
  */
-static float calc_heater_res(uint16_t temp, const struct bme680_dev *dev)
+static float f_calc_heater_res(uint16_t temp, const struct bme680_dev *dev)
 {
 	float var1 = 0;
 	float var2 = 0;
@@ -1167,7 +1175,7 @@ static float calc_heater_res(uint16_t temp, const struct bme680_dev *dev)
 	return res_heat;
 }
 
-#endif
+// #endif
 
 /*!
  * @brief This internal API is used to calculate the Heat duration value.
@@ -1228,10 +1236,18 @@ static int8_t read_field_data(struct bme680_field_data *data, struct bme680_dev 
 			data->status |= buff[14] & BME680_HEAT_STAB_MSK;
 
 			if (data->status & BME680_NEW_DATA_MSK) {
-				data->temperature = calc_temperature(adc_temp, dev);
-				data->pressure = calc_pressure(adc_pres, dev);
-				data->humidity = calc_humidity(adc_hum, dev);
-				data->gas_resistance = calc_gas_resistance(adc_gas_res, gas_range, dev);
+				if(bme680_output_data_type == 0) {
+					data->temperature = calc_temperature(adc_temp, dev);
+					data->pressure = calc_pressure(adc_pres, dev);
+					data->humidity = calc_humidity(adc_hum, dev);
+					data->gas_resistance = calc_gas_resistance(adc_gas_res, gas_range, dev);
+				}
+				else {
+					data->f_temperature = f_calc_temperature(adc_temp, dev);
+					data->f_pressure = f_calc_pressure(adc_pres, dev);
+					data->f_humidity = f_calc_humidity(adc_hum, dev);
+					data->f_gas_resistance = f_calc_gas_resistance(adc_gas_res, gas_range, dev);
+				}
 				break;
 			}
 			/* Delay to poll the data */
@@ -1351,4 +1367,14 @@ static int8_t null_ptr_check(const struct bme680_dev *dev)
 	}
 
 	return rslt;
+}
+
+void  bme680_set_data_type(uint32_t  type)
+{
+	bme680_output_data_type = type;
+}
+
+uint32_t  bme680_get_data_type()
+{
+	return bme680_output_data_type;
 }

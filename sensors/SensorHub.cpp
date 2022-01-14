@@ -29,12 +29,8 @@ namespace CMC
     AcousticNode acoustic_node(PB_6, 2000);
     BME680 bme680(0x76 << 1, &i2c1);
     GMC306 gmc306(&i2c1, 10);
-    KX122 kx122(&spi0, PA_10, 800);
+    KX122 kx122(&spi0, PA_10, 3200);
 
-    int32_t adc_data[6];
-    float bme680_sensor_data[4];
-    int magnet_data[GMC306_ADC_CHANNELS];
-    float kx122_data[3];
 
 
     /**
@@ -203,8 +199,11 @@ namespace CMC
                 }
                 if (flags & SENSOR_EVENT(SENSOR_BME680))
                 {
-                    m_dataLen = sensors[SENSOR_BME680]->Read(&bme680_sensor_data, sizeof(bme680_sensor_data));
-                    printf("bme680_sensor_data: %.2f, %.2f, %.2f, %.2f\n", bme680_sensor_data[0], bme680_sensor_data[1], bme680_sensor_data[2], bme680_sensor_data[3]);
+                    m_dataLen = sensors[SENSOR_BME680]->Read(m_dataBuffer, sizeof(m_dataBuffer));
+                    //  printf("bme680_sensor_data: %.2f degC, %d Pa, %.2f %%, %d Ohm\n",(float) m_dataBuffer[0] / 100,
+                    //          m_dataBuffer[1] * BME680_PRESSURE_SCALE_VALUE,
+                    //          (float) m_dataBuffer[2] /1000 * BME680_HUMIDITY_SCALE_VALUE ,
+                    //          m_dataBuffer[3] * BME680_GAS_SCALE_VALUE);
                 }
                 if (flags & SENSOR_EVENT(SENSOR_GMC306))
                 {
