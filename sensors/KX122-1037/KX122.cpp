@@ -24,7 +24,6 @@ namespace CMC
             {3200, KX122_ODCNTL_OSA_3200},
             {6400, KX122_ODCNTL_OSA_6400},
             {12800, KX122_ODCNTL_OSA_12800},
-            {25600, KX122_ODCNTL_OSA_25600},
     };
 
     KX122::KX122(SPI *spi_obj, PinName drdy_pin, int odr)

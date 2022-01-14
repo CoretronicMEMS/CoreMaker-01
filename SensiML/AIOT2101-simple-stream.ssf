@@ -51,6 +51,7 @@
             "name": "Audio",
             "part": "Default",
             "sample_rates": [
+                16000,
                 8000,
                 4000,
                 2000,
@@ -100,6 +101,7 @@
             "name": "Motion",
             "part": "KX122-1037",
             "sample_rates": [
+                12800,
                 6400,
                 3200,
                 1600,
