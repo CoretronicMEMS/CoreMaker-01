@@ -29,6 +29,7 @@ target_include_directories(${APP_TARGET}
         ${CMAKE_CURRENT_SOURCE_DIR}/sensors/BME680
         ${CMAKE_CURRENT_SOURCE_DIR}/sensors/KX122-1037
         ${CMAKE_CURRENT_SOURCE_DIR}/sd_card
+        ${CMAKE_CURRENT_SOURCE_DIR}/libsensiml
 )
 
 target_sources(${APP_TARGET}
@@ -53,6 +54,7 @@ target_link_libraries(${APP_TARGET}
         mbed-usb
         mbed-netsocket
         mbed-storage
+        ${CMAKE_CURRENT_SOURCE_DIR}/libsensiml/libsensiml.a
 )
 
 mbed_set_post_build(${APP_TARGET})

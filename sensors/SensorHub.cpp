@@ -8,9 +8,9 @@
 #include "DebounceIn.h"
 #include "lightEffect.hpp"
 #include "jWrite.h"
-// #include "libsensiml/kb.h"
-// #include "libsensiml/kb_defines.h"
-// #include "libsensiml/kb_debug.h"
+#include "libsensiml/kb.h"
+#include "libsensiml/kb_defines.h"
+#include "libsensiml/kb_debug.h"
 
 extern LightEffect led_r;
 extern FlashLED led_g;
@@ -20,6 +20,9 @@ extern DebounceIn sw3_2;
 extern DebounceIn sw3_3;
 extern USBSerial serial;
 
+
+// 1: Run AI inference; 0: Run DCL connection
+#define AI_INFERENCE    0
 
 namespace CMC
 {
@@ -196,6 +199,16 @@ namespace CMC
                 {
                     m_dataLen = sensors[SENSOR_ACOUSTIC_NODE]->Read(m_dataBuffer, sizeof(m_dataBuffer));
                     //printf("mic: %d\n", m_dataBuffer[0]);
+#if(AI_INFERENCE == 1)
+                    // SensiML inference
+                    SENSOR_DATA_T* s_data = (SENSOR_DATA_T*)m_dataBuffer;
+                    int ret = kb_run_model(s_data, 3, 0);
+                    if (ret != -1) {
+			            DBG_MSG("%d\n", ret);
+                        // Reset running model to initial state.
+                        kb_reset_model(0);
+	                }
+#endif                    
                 }
                 if (flags & SENSOR_EVENT(SENSOR_BME680))
                 {
@@ -214,6 +227,16 @@ namespace CMC
                 {
                     m_dataLen = sensors[SENSOR_KX122]->Read(m_dataBuffer, sizeof(m_dataBuffer));
                     //printf("kx122_data: %d, %d, %d\n", m_dataBuffer[0], m_dataBuffer[1], m_dataBuffer[2]);
+#if(AI_INFERENCE == 1)
+                    // SensiML inference
+                    SENSOR_DATA_T* s_data = (SENSOR_DATA_T*)m_dataBuffer;
+                    int ret = kb_run_model(s_data, 3, 0);
+                    if (ret != -1) {
+			            DBG_MSG("%d\n", ret);
+                        // Reset running model to initial state.
+                        kb_reset_model(0);
+	                }
+#endif                   
                 }
                 if (flags & SENSOR_EVENT(SENSOR_TEST))
                 {
