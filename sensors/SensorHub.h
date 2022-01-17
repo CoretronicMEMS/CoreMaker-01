@@ -107,6 +107,13 @@ public:
     void ButtonPress();
     void SelectSensor(SensorType sensorId);
     SensorType SelectedSensor();
+    static void PrintRawData(int16_t *data, int len)
+    {
+        printf("Raw: ");
+        for(int i = 0; i<len; i++)
+            printf("%d ", data[i]);
+        printf("\n");
+    }
 
     static Sensor* sensors[];
 

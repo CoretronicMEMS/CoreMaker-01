@@ -21,8 +21,8 @@ extern DebounceIn sw3_3;
 extern USBSerial serial;
 
 
-// 1: Run AI inference; 0: Run DCL connection
-#define AI_INFERENCE    0
+
+typedef int (*RUN_MODEL)(SENSOR_DATA_T *, int , int );
 
 namespace CMC
 {
@@ -47,6 +47,14 @@ namespace CMC
         &bme680,
         &kx122,
         &gmc306
+    };
+
+    RUN_MODEL run_ai_model[] = 
+    {
+        kb_run_model,
+        NULL,
+        NULL,
+        NULL
     };
 
     SensorHub::SensorHub() : sensorEvent("sensorEvent")
@@ -195,48 +203,31 @@ namespace CMC
             if (!(flags & osFlagsError))
             {
                 int m_dataLen = 0;
-                if (flags & SENSOR_EVENT(SENSOR_ACOUSTIC_NODE))
+                for(int i=0; i<SENSOR_MAX; i++)
                 {
-                    m_dataLen = sensors[SENSOR_ACOUSTIC_NODE]->Read(m_dataBuffer, sizeof(m_dataBuffer));
-                    //printf("mic: %d\n", m_dataBuffer[0]);
-#if(AI_INFERENCE == 1)
-                    // SensiML inference
-                    SENSOR_DATA_T* s_data = (SENSOR_DATA_T*)m_dataBuffer;
-                    int ret = kb_run_model(s_data, 1, 0);
-                    if (ret != -1) {
-			            DBG_MSG("%d\n", ret);
-                        // Reset running model to initial state.
-                        kb_reset_model(0);
-	                }
-#endif
-                }
-                if (flags & SENSOR_EVENT(SENSOR_BME680))
-                {
-                    m_dataLen = sensors[SENSOR_BME680]->Read(m_dataBuffer, sizeof(m_dataBuffer));
-                    //  printf("bme680_sensor_data: %.2f degC, %d Pa, %.2f %%, %d Ohm\n",(float) m_dataBuffer[0] / 100,
-                    //          m_dataBuffer[1] * BME680_PRESSURE_SCALE_VALUE,
-                    //          (float) m_dataBuffer[2] /1000 * BME680_HUMIDITY_SCALE_VALUE ,
-                    //          m_dataBuffer[3] * BME680_GAS_SCALE_VALUE);
-                }
-                if (flags & SENSOR_EVENT(SENSOR_GMC306))
-                {
-                    m_dataLen = sensors[SENSOR_GMC306]->Read(m_dataBuffer, sizeof(m_dataBuffer));
-                    //printf("magnet: %d, %d, %d\n", m_dataBuffer[0], m_dataBuffer[1], m_dataBuffer[2]);
-                }
-                if (flags & SENSOR_EVENT(SENSOR_KX122))
-                {
-                    m_dataLen = sensors[SENSOR_KX122]->Read(m_dataBuffer, sizeof(m_dataBuffer));
-                    //printf("kx122_data: %d, %d, %d\n", m_dataBuffer[0], m_dataBuffer[1], m_dataBuffer[2]);
-#if(AI_INFERENCE == 1)
-                    // SensiML inference
-                    SENSOR_DATA_T* s_data = (SENSOR_DATA_T*)m_dataBuffer;
-                    int ret = kb_run_model(s_data, 3, 0);
-                    if (ret != -1) {
-			            DBG_MSG("%d\n", ret);
-                        // Reset running model to initial state.
-                        kb_reset_model(0);
-	                }
-#endif
+                    if (flags & SENSOR_EVENT(i))
+                    {
+                        m_dataLen = sensors[i]->Read(m_dataBuffer, sizeof(m_dataBuffer));
+                        if(m_dataLen)
+                        {
+                            if(i == SENSOR_BME680)
+                                bme680.PrintFormatedData(m_dataBuffer);
+                            // else
+                            //     PrintRawData(m_dataBuffer, m_dataLen/sizeof(short));
+
+                            if(m_DCLStatus == DCL_CONNECTED)
+                                serial.send((uint8_t*)m_dataBuffer, m_dataLen);
+                            else if(run_ai_model[i])
+                            {
+                                int ret = run_ai_model[i]((SENSOR_DATA_T*)m_dataBuffer, m_dataLen/sizeof(short), 0);
+                                if (ret > 0)
+                                    printf("AI classification result: %d\n", ret);
+                                else
+                                    printf("AI error: %d\n", ret);
+                                kb_reset_model(0); // Reset running model to initial state.
+                            }
+                        }
+                    }
                 }
                 if (flags & SENSOR_EVENT(SENSOR_TEST))
                 {
@@ -245,11 +236,6 @@ namespace CMC
                         sensorEvent.set(SENSOR_EVENT(SENSOR_TEST));
                 }
 
-                if(m_SensorStart && m_dataLen)
-                {
-                    if(m_DCLStatus == DCL_CONNECTED)
-                        serial.send((uint8_t*)m_dataBuffer, m_dataLen);
-                }
                 led_g.Flash();
             }
             else if (flags == osFlagsErrorTimeout) // No event

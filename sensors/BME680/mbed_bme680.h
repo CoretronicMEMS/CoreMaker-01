@@ -35,6 +35,14 @@ namespace CMC
         int32_t Control(uint32_t control, uint32_t arg) override final;
         virtual const char* Name() { return "bme680"; }
 
+        static void PrintFormatedData(int16_t *data)
+        {
+            printf("bme680_sensor_data: %.2f degC, %d Pa, %.2f %%, %d Ohm\n",(float) data[0] / 100,
+                             data[1] * BME680_PRESSURE_SCALE_VALUE,
+                             (float) data[2] /1000 * BME680_HUMIDITY_SCALE_VALUE ,
+                             data[3] * BME680_GAS_SCALE_VALUE);
+        }
+
     private:
         bool _filterEnabled, _tempEnabled, _humEnabled, _presEnabled, _gasEnabled;
         int32_t _sensorID;
