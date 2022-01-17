@@ -202,13 +202,13 @@ namespace CMC
 #if(AI_INFERENCE == 1)
                     // SensiML inference
                     SENSOR_DATA_T* s_data = (SENSOR_DATA_T*)m_dataBuffer;
-                    int ret = kb_run_model(s_data, 3, 0);
+                    int ret = kb_run_model(s_data, 1, 0);
                     if (ret != -1) {
 			            DBG_MSG("%d\n", ret);
                         // Reset running model to initial state.
                         kb_reset_model(0);
 	                }
-#endif                    
+#endif
                 }
                 if (flags & SENSOR_EVENT(SENSOR_BME680))
                 {
@@ -236,7 +236,7 @@ namespace CMC
                         // Reset running model to initial state.
                         kb_reset_model(0);
 	                }
-#endif                   
+#endif
                 }
                 if (flags & SENSOR_EVENT(SENSOR_TEST))
                 {
