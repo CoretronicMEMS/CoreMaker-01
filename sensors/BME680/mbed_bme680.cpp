@@ -124,7 +124,7 @@ namespace CMC
                 data[3] = 0;
             }
 
-            return 0;
+            return 4;
         }
 
         return -1;
