@@ -1,9 +1,4 @@
 .mbedbuild
 cmake_build/
 build/
-.vscode/.BROWSE.C_CPP.DB-wal
-.vscode/.BROWSE.C_CPP.DB-shm
-.vscode/.BROWSE.C_CPP.DB
-.vscode/*.log
-.vscode/c_cpp_properties.json
-.vscode/launch.json
+.vscode/
