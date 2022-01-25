@@ -234,8 +234,8 @@ Recommend editor
         }
     ],
     "version": 4
-}
-```
+   }
+   ```
 
    #### VSCode Tasks (Optional)
 
