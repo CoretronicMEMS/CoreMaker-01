@@ -124,3 +124,16 @@ int write_sd_card_txt_data(const char *filename, int *data, unsigned int len)
 
     return 0;
 }
+
+int main()
+{
+    printf("Mbed OS version - %d.%d.%d\n\n", MBED_MAJOR_VERSION, MBED_MINOR_VERSION, MBED_PATCH_VERSION);
+
+    // sd card
+    int sd_card_test_data[10] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+    write_sd_card_txt_data("/fs/numbers.txt", sd_card_test_data, 10);
+    read_sd_card_txt_data("/fs/numbers.txt");
+
+    return 0;
+}
+

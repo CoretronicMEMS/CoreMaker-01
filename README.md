@@ -21,7 +21,9 @@ Menu
       - [CMake for mbed setting](#cmake-for-mbed-setting)
       - [C/C++ intellisense](#cc-intellisense)
       - [VSCode Tasks (Optional)](#vscode-tasks-optional)
-
+- [Function Test](#function-test)
+  - [Wifi](#wifi)
+  - [SD card](#sd-card)
 ---
 
 Board overview
@@ -261,3 +263,22 @@ Recommend editor
       }
    ]
    ```
+
+---
+
+Function Test
+================
+
+## Wifi
+  1. Open the netassist application and start the tcp server
+  2. Modify the main.cpp string to wifi_example.cpp string in CMakeLists.txt
+  2. Modify the settings of wifi-ssid and wifi-password in mbed_app.json according to the router settings
+  3. Convert the IP address and port on line 60 in wifi_example.cpp into the IP address and port of the tcp server
+  4. Re-build image and burn image to pcb board
+  5. After waiting for a period of time, confirm whether the tcp server has received the data, if so, the function is normal
+
+## SD card
+  1. Prepare a sdcard with fat32 format and plug into pcb board
+  2. Modify the main.cpp string to sdcard_example.cpp string in CMakeLists.txt
+  2. Re-build image and burn image to pcb board
+  3. Check whether there is a file numbers.txt in the sdcard, and the content is a number from 0 to 9. If so, the sdcard function is normal
