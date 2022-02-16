@@ -97,6 +97,8 @@ namespace CMC
             sensors[i]->Initialize();
             sensors[i]->SetAsyncEvent(&sensorEvent, SENSOR_EVENT(i));
         }
+        // SensiML library initialization
+		kb_model_init();
     }
 
     void SensorHub::SelectSensor(SensorType sensorId)
@@ -244,11 +246,15 @@ namespace CMC
                             else if(run_ai_model[i])
                             {
                                 int ret = run_ai_model[i]((SENSOR_DATA_T*)m_dataBuffer, m_dataLen/sizeof(short), 0);
-                                if (ret > 0)
+                                if (ret > -1)
+                                {
                                     printf("AI classification result: %d\n", ret);
-                                else
+                                    kb_reset_model(0); // Reset running model to initial state.
+                                }
+                                else if (ret == -2)
+                                    printf("This segment has been filtered.\n");
+                                else if (ret < -2)
                                     printf("AI error: %d\n", ret);
-                                kb_reset_model(0); // Reset running model to initial state.
                             }
                         }
                     }
