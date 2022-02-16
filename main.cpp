@@ -140,7 +140,7 @@ void onSerialReceived()
         if(serialRxLen < sizeof(serialRxBuf)-1)
             serialRxLen += serial.read(serialRxBuf + serialRxLen, 1);
     }
-    if(serialRxBuf[serialRxLen-1] == '\n' || serialRxLen == sizeof(serialRxBuf)-1)
+    if(serialRxBuf[serialRxLen-1] == '\n' || serialRxLen == sizeof(serialRxBuf)-1 || strncmp(serialRxBuf, "connect", 7) == 0)
     {
         serialRxBuf[serialRxLen] = 0;
         CmdHandler();
