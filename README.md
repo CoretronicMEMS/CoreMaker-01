@@ -3,6 +3,7 @@ Menu
 ====
 
 - [Menu](#menu)
+  - [- SD card](#--sd-card)
 - [Board overview](#board-overview)
   - [Sensor](#sensor)
   - [LED](#led)
@@ -29,7 +30,7 @@ Menu
 Board overview
 ==============
 
-![alt text](docs/board_top_view.png)
+![alt text](docs/board_top_view_V1.1.png)
 
 ## Sensor
 
@@ -51,14 +52,14 @@ Board overview
 
 ## Switch
 
-| Switch | pin | define           |
-| ------ | --- | ---------------- |
-| SW1    | x   | Reset button     |
-| SW2    | PA4 | PA4, user define |
-| SW3_1  | X   |                  |
-| SW3_2  | PF4 |                  |
-| SW3_3  | PF5 |                  |
-| SW3_4  | X   |                  |
+| Switch | pin  | define           |
+| ------ | ---- | ---------------- |
+| SW1    | x    | Reset button     |
+| SW2    | PA4  | PA4, user define |
+| SW3_1  | X    |                  |
+| SW3_2  | PF4  |                  |
+| SW3_3  | PF5  |                  |
+| SW3_4  | PA11 |                  |
 
 ## Connector
 
