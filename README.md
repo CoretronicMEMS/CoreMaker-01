@@ -150,12 +150,20 @@ Requirements
    ```
    python -m pip install mbed-tools
    ```
+   For more informations, please refer to https://os.mbed.com/docs/mbed-os/v6.15/build-tools/mbed-cli-2.html
 
 * GNU Arm Embedded Toolchain
    * https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads
 
-* NuMicro_ICP_Programming_Tool
-   * https://www.nuvoton.com/support/tool-and-software/software/programmer/?__locale=zh_TW
+* Programming tool: one of belows
+  1. Novoton programmer
+     * `NuLink` (https://direct.nuvoton.com/tw/nu-link)
+     * `NuMicro_ICP_Programming_Tool`
+       * https://www.nuvoton.com/support/tool-and-software/software/programmer/?__locale=zh_TW
+       * Download ```NuMicro_ICP_Programming_Tool``` and install it.
+  2. ARM DAPLink
+     Please refer to https://os.mbed.com/docs/mbed-os/v6.15/debug-test/daplink.html
+
 
 ---
 
@@ -165,6 +173,7 @@ Git clone
 ```
 git clone --recurse-submodules <repo url>
 ```
+And then program with your favorite editor, like Notepad++, Sublime, VS Code, etc.
 
 ---
 
@@ -184,15 +193,19 @@ mbed-tools configure -t GCC_ARM -m AIOT2101
 cmake -S . -B cmake_build/AIOT2101/develop/GCC_ARM -GNinja
 cmake --build ./cmake_build/AIOT2101/develop/GCC_ARM
 ```
+For more informations, please refer to https://os.mbed.com/docs/mbed-os/v6.15/build-tools/use.html
 
 ### Flash programming
 
-  1. Open NuMicro_ICP_Programming_Tool
-  2. Select `M480 series`
-  3. Select `APROM` file (*.bin or *.hex)
-     ```./cmake_build/AIOT2101/develop/GCC_ARM/AIOT_2101.bin```
-  4. Enable `APROM` check box
-  5. Press `Start`
+   * Use Nuvoton Nulink
+     1. Open NuMicro_ICP_Programming_Tool
+     2. Select `M480 series`
+     3. Select `APROM` file (*.bin or *.hex)
+        ```./cmake_build/AIOT2101/develop/GCC_ARM/AIOT_2101.bin```
+     4. Enable `APROM` check box
+     5. Press `Start`
+   * Use DAPLink
+     Please refer to https://os.mbed.com/docs/mbed-os/v6.15/debug-test/daplink.html
 
 ---
 
