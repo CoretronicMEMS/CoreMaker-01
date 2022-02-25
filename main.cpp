@@ -43,6 +43,7 @@ FlashLED led_b(LED_BLUE);
 DebounceIn sw2(SW2, PullUp);
 DebounceIn sw3_2(SW3_2);
 DebounceIn sw3_3(SW3_3);
+DebounceIn sw3_4(SW3_4);
 USBSerial serial(false);
 EventFlags mainEvent;
 char serialRxBuf[100];
@@ -74,6 +75,8 @@ int main()
     sw3_2.rise(SW3_ISR);
     sw3_3.fall(SW3_ISR);
     sw3_3.rise(SW3_ISR);
+    sw3_4.fall(SW3_ISR);
+    sw3_4.rise(SW3_ISR);
 
     sensorHub.Initial();
     sensorHub.SelectSensor((SensorType)GetSwitchSelect());
@@ -104,7 +107,7 @@ int main()
 int GetSwitchSelect()
 {
     int sw_sel;
-    sw_sel = (sw3_2<<0) | (sw3_3<<1);
+    sw_sel = (sw3_2<<0) | (sw3_3<<1) | (sw3_4<<2);
     return sw_sel;
 }
 

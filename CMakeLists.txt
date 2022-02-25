@@ -27,6 +27,7 @@ target_include_directories(${APP_TARGET}
         ${CMAKE_CURRENT_SOURCE_DIR}/nvt_rs485/
         ${CMAKE_CURRENT_SOURCE_DIR}/sensors/
         ${CMAKE_CURRENT_SOURCE_DIR}/sensors/BME680
+        ${CMAKE_CURRENT_SOURCE_DIR}/sensors/GMP102
         ${CMAKE_CURRENT_SOURCE_DIR}/sensors/KX122-1037
         ${CMAKE_CURRENT_SOURCE_DIR}/sd_card
         ${CMAKE_CURRENT_SOURCE_DIR}/libsensiml
@@ -44,6 +45,8 @@ target_sources(${APP_TARGET}
         sensors/SensorHub.cpp
         sensors/BME680/mbed_bme680.cpp
         sensors/BME680/bme680.cpp
+        sensors/GMP102/mbed_gmp102.cpp
+        sensors/GMP102/gmp102.cpp
         sensors/KX122-1037/KX122.cpp
         sd_card/NuSDBlockDevice.cpp
 )

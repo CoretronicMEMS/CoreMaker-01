@@ -27,6 +27,7 @@
 #include "ADS131E.h"
 #include "AcousticNode.h"
 #include "mbed_bme680.h"
+#include "mbed_gmp102.h"
 #include "KX122.h"
 #include "GMC306.h"
 #include "DebounceIn.h"
@@ -42,12 +43,11 @@ extern FlashLED led_b;
 extern DebounceIn sw2;
 extern DebounceIn sw3_2;
 extern DebounceIn sw3_3;
+extern DebounceIn sw3_4;
 extern USBSerial serial;
 
 
-
 typedef int (*RUN_MODEL)(SENSOR_DATA_T *, int , int );
-
 namespace CMC
 {
     SPI spi0(PA_0, PA_1, PA_2, PA_3, mbed::use_gpio_ssel);
@@ -55,6 +55,7 @@ namespace CMC
 
     AcousticNode acoustic_node(PB_6, 2000);
     BME680 bme680(0x76 << 1, &i2c1);
+    GMP102 gmp102(&i2c1,256);
     GMC306 gmc306(&i2c1, 10);
     KX122 kx122(&spi0, PA_10, 3200);
 
@@ -70,12 +71,14 @@ namespace CMC
         &acoustic_node,
         &bme680,
         &kx122,
-        &gmc306
+        &gmc306,
+        &gmp102
     };
 
     RUN_MODEL run_ai_model[] = 
     {
         kb_run_model,
+        NULL,
         NULL,
         NULL,
         NULL
@@ -112,7 +115,10 @@ namespace CMC
             }
 
             m_SensorSel = sensorId;
-            DBG_MSG("Sensor select %d: %s\n", m_SensorSel, sensors[m_SensorSel]->Name());
+            if(sensorId >0 && sensorId <SENSOR_MAX)
+            {
+                DBG_MSG("Sensor select %d: %s\n", m_SensorSel, sensors[m_SensorSel]->Name());
+            }
         }
     }
 
@@ -236,13 +242,16 @@ namespace CMC
                         m_dataLen = sensors[i]->Read(m_dataBuffer, sizeof(m_dataBuffer));
                         if(m_dataLen)
                         {
-                            if(i == SENSOR_BME680)
-                                bme680.PrintFormatedData(m_dataBuffer);
-                            // else
-                            //     PrintRawData(m_dataBuffer, m_dataLen/sizeof(short));
+                            // if(i == SENSOR_BME680)
+                            //     bme680.PrintFormatedData(m_dataBuffer);
+
+                            // if(i == SENSOR_GMP102)
+                            //     gmp102.PrintFormatedData(m_dataBuffer);
 
                             if(m_DCLStatus == DCL_CONNECTED)
+                            {
                                 serial.send((uint8_t*)m_dataBuffer, m_dataLen);
+                            }
                             else if(run_ai_model[i])
                             {
                                 int ret = run_ai_model[i]((SENSOR_DATA_T*)m_dataBuffer, m_dataLen/sizeof(short), 0);
@@ -350,6 +359,8 @@ namespace CMC
             jwObj_int(&jwc, "samples_per_packet", 4);
         else if(m_SensorSel == SENSOR_KX122 || m_SensorSel == SENSOR_GMC306)
             jwObj_int(&jwc, "samples_per_packet", 3);
+        else if(m_SensorSel == SENSOR_GMP102)
+            jwObj_int(&jwc, "samples_per_packet", 2);
         jwObj_object(&jwc, "column_location"); // object in the root object
         switch (m_SensorSel)
         {
@@ -371,6 +382,10 @@ namespace CMC
             jwObj_int(&jwc, "MagnetX", 0);
             jwObj_int(&jwc, "MagnetY", 1);
             jwObj_int(&jwc, "MagnetZ", 2);
+            break;
+        case SENSOR_GMP102:
+            jwObj_int(&jwc, "Temperature", 0);
+            jwObj_int(&jwc, "Pressure", 1);
             break;
         default:
             break;

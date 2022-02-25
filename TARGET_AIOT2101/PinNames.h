@@ -94,6 +94,7 @@ typedef enum {
     // Switch naming
     SW3_2 = PF_4,
     SW3_3 = PF_5,
+    SW3_4 = PA_11,
 
     // Force PinName to 32-bit required by NU_PINNAME_BIND(...)
     FORCE_ENUM_PINNAME_32BIT = 0x7FFFFFFF,
