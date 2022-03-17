@@ -3,6 +3,7 @@
     "device_name": "CoreMaker-01",
     "device_manufacturer": "CoretronicMEMS",
     "plugin_developer": "CoretronicMEMS",
+    "is_little_endian": true,
     "firmware_download_links": [
         {
           "title": "Data Collection Firmware",
