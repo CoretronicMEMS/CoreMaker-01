@@ -148,6 +148,32 @@
                     ]
                 }
             ]
+        },
+        {
+            "name": "Pressure",
+            "part": "GMP102",
+            "sample_rates": [
+                32768,
+	    16384,
+                8192,
+                4096,
+                2048,
+                1024,
+                512,
+                256
+            ],
+            "sensors": [
+                {
+                    "column_count": 1,
+                    "type": "Temperature",
+                    "is_default": true
+                },
+                {
+                    "column_count": 1,
+                    "type": "Pressure",
+                    "is_default": true
+                }
+            ]
         }
     ]
 }
