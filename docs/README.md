@@ -2,7 +2,7 @@
 coremaker-01 document
 =====================
 
-- [coremaker-01 操作指南:環境設定、下載及編譯原始碼、加入AI]
+- [coremaker-01 操作指南:環境設定、下載及編譯原始碼、加入AI](https://github.com/frank1201/CoreMaker-01/blob/master/docs/coremaker%E6%93%8D%E4%BD%9C%E6%8C%87%E5%8D%97_V1.1.pdf)
 - [範例程式]
     - [wife 運行指南](https://github.com/frank1201/CoreMaker-01/blob/master/docs/CoreMaker-01%20wife%20%E9%81%8B%E8%A1%8C%E6%8C%87%E5%8D%97.pdf)
     - [sd card 運行指南](https://github.com/frank1201/CoreMaker-01/blob/master/docs/CoreMaker-01%20Sd%20card%E9%81%8B%E8%A1%8C%E6%8C%87%E5%8D%97.pdf)
