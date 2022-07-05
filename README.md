@@ -85,8 +85,8 @@ Board overview
 | 7   | SPI3_CLK_mikro  | 8   | UART2_TXD_mikro |
 | 9   | SPI3_MISO_mikro | 10  | I2C0_SCL_mikro  |
 | 11  | SPI3_MOSI_mikro | 12  | I2C0_SDA_mikro  |
-| 13  | 3.3V            | 15  | 5V              |
-| 14  | GND             | 16  | GND             |
+| 13  | 3.3V            | 14  | GND             |
+| 15  | 5V              | 16  | GND             |
 
 * J4: USB
 
