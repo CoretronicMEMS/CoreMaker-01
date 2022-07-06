@@ -198,8 +198,7 @@ Build project
    ```
    For more informations, please refer to https://os.mbed.com/docs/mbed-os/v6.15/build-tools/use.html
 
-### Flash programming
-
+* Flash programming
    * Use Nuvoton Nulink
      1. Open NuMicro_ICP_Programming_Tool
      2. Select `M480 series`
@@ -302,7 +301,8 @@ Function Test
   3. Convert the IP address and port on line 60 in wifi_example.cpp into the IP address and port of the tcp server
   4. Re-build image and burn image to pcb board
   5. After waiting for a period of time, confirm whether the tcp server has received the data, if so, the function is normal
-  * [WIFI 運行指南](https://github.com/CoretronicMEMS/CoreMaker-01/blob/master/docs/CoreMaker-01%20wife%20%E9%81%8B%E8%A1%8C%E6%8C%87%E5%8D%97.pdf)
+  * [WIFI 運行指南](https://github.com/CoretronicMEMS/CoreMaker-01/blob/master/docs/CoreMaker-01%20wifi%20%E9%81%8B%E8%A1%8C%E6%8C%87%E5%8D%97.pdf)
+
 
 ## SD Card
   1. Prepare a sdcard with fat32 format and plug into pcb board
