@@ -7,9 +7,9 @@ Menu
   - [LED](#led)
   - [Switch](#switch)
   - [Connector](#connector)
-- [Requirements](#requirements) : 架設環境
-- [Git clone](#git-clone) : 下載CoreMaker-01檔案
-- [Build project](#build-project) : 編譯
+- [架設環境(Requirements)](#requirements) 
+- [下載CoreMaker-01檔案(Git clone)](#git-clone) 
+- [編譯程序](#build-project) 
 - [Recommend editor](#recommend-editor)
   - [VSCode](#vscode)
     - [Extensions](#extensions)
@@ -165,7 +165,7 @@ git clone --recurse-submodules <repo url>
 And then program with your favorite editor, like Notepad++, Sublime, VS Code, etc.
 
 * [下載步驟](https://github.com/CoretronicMEMS/CoreMaker-01/blob/master/docs/coremaker%E6%93%8D%E4%BD%9C%E6%8C%87%E5%8D%97_V1.1.pdf)
-   * 引導您將上述下載步驟玩成
+   * 引導您將上述下載步驟完成
 
 Build project
 =============
@@ -185,6 +185,8 @@ Build project
    ```
    For more informations, please refer to https://os.mbed.com/docs/mbed-os/v6.15/build-tools/use.html
 
+*  [編譯步驟](https://github.com/CoretronicMEMS/CoreMaker-01/blob/master/docs/coremaker%E6%93%8D%E4%BD%9C%E6%8C%87%E5%8D%97_V1.1.pdf)
+   * 引導您將上述的編譯步驟完成
 ---
 
 
