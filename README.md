@@ -263,7 +263,8 @@ Recommend editor
       ]
      ```
 
-* ## [Visual Studio Code 編譯環境設定步驟](https://github.com/CoretronicMEMS/CoreMaker-01/blob/master/docs/CoreMaker-01%20Visual%20Studio%20Code%20%E7%B7%A8%E8%AD%AF%E7%92%B0%E5%A2%83%E8%A8%AD%E5%AE%9A%E8%AA%AA%E6%98%8E.pdf)
+* ### [Visual Studio Code 編譯環境設定步驟](https://github.com/CoretronicMEMS/CoreMaker-01/blob/master/docs/CoreMaker-01%20Visual%20Studio%20Code%20%E7%B7%A8%E8%AD%AF%E7%92%B0%E5%A2%83%E8%A8%AD%E5%AE%9A%E8%AA%AA%E6%98%8E.pdf)
+   *  引導您將上述Visual Studio Code 編譯環境設定內容完成
 
 ---
 
@@ -277,9 +278,11 @@ Function Test
   3. Convert the IP address and port on line 60 in wifi_example.cpp into the IP address and port of the tcp server
   4. Re-build image and burn image to pcb board
   5. After waiting for a period of time, confirm whether the tcp server has received the data, if so, the function is normal
+  * [範例程式](https://github.com/CoretronicMEMS/CoreMaker-01/blob/master/docs/CoreMaker-01%20wife%20%E9%81%8B%E8%A1%8C%E6%8C%87%E5%8D%97.pdf)
 
 ## SD card
   1. Prepare a sdcard with fat32 format and plug into pcb board
   2. Modify the main.cpp string to sdcard_example.cpp string in CMakeLists.txt
   2. Re-build image and burn image to pcb board
   3. Check whether there is a file numbers.txt in the sdcard, and the content is a number from 0 to 9. If so, the sdcard function is normal
+  * [範例程式](https://github.com/CoretronicMEMS/CoreMaker-01/blob/master/docs/CoreMaker-01%20wife%20%E9%81%8B%E8%A1%8C%E6%8C%87%E5%8D%97.pdf)
