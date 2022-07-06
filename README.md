@@ -7,12 +7,11 @@ Menu
   - [LED](#led)
   - [Switch](#switch)
   - [Connector](#connector)
-- [Requirements](#requirements)
-- [Git clone](#git-clone)
-- [Build project](#build-project)
+- [Requirements](#requirements):架設環境
+- [Git clone](#git-clone):下載CoreMaker-01檔案
+- [Build project](#build-project):編譯
     - [Configure and build in a single step](#configure-and-build-in-a-single-step)
     - [Build the project with CMake (advanced)](#build-the-project-with-cmake-advanced)
-    - [Flash programming](#flash-programming)
 - [Recommend editor](#recommend-editor)
   - [VSCode](#vscode)
     - [Extensions](#extensions)
