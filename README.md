@@ -261,7 +261,9 @@ Recommend editor
             "detail": "編譯器: cmake"
          }
       ]
-      ```
+     ```
+
+* ## [Visual Studio Code 編譯環境設定步驟](https://github.com/CoretronicMEMS/CoreMaker-01/blob/master/docs/CoreMaker-01%20Visual%20Studio%20Code%20%E7%B7%A8%E8%AD%AF%E7%92%B0%E5%A2%83%E8%A8%AD%E5%AE%9A%E8%AA%AA%E6%98%8E.pdf)
 
 ---
 
