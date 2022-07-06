@@ -157,7 +157,8 @@ Requirements
      Please refer to https://os.mbed.com/docs/mbed-os/v6.15/debug-test/daplink.html
   3. Use CMC_ISP file
       * Download CoreMaker-01 and open CMC_ISP file
-        [詳細內容請點此連結](https://github.com/CoretronicMEMS/CoreMaker-01/blob/master/docs/coremaker%E6%93%8D%E4%BD%9C%E6%8C%87%E5%8D%97_V1.1.pdf) 
+            [(詳細內容請點此連結)](https://github.com/CoretronicMEMS/CoreMaker-01/blob/master/docs/coremaker%E6%93%8D%E4%BD%9C%E6%8C%87%E5%8D%97_V1.1.pdf) 
+
 
 
 
@@ -208,7 +209,10 @@ Build project
      5. Press `Start`
    * Use DAPLink
      Please refer to https://os.mbed.com/docs/mbed-os/v6.15/debug-test/daplink.html
-   * Use CMC_ISP
+   * Use CMC_ISP file
+      * Download CoreMaker-01 and open CMC_ISP file
+        [(詳細內容請點此連結)](https://github.com/CoretronicMEMS/CoreMaker-01/blob/master/docs/coremaker%E6%93%8D%E4%BD%9C%E6%8C%87%E5%8D%97_V1.1.pdf) 
+
          
 
 
