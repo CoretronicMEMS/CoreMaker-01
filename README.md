@@ -2,26 +2,16 @@
 Menu
 ====
 
-- [Menu](#menu)
-  - [- SD card](#--sd-card)
 - [Board overview](#board-overview)
   - [Sensor](#sensor)
   - [LED](#led)
   - [Switch](#switch)
   - [Connector](#connector)
-- [Requirements](#requirements)
-- [Git clone](#git-clone)
-- [Build project](#build-project)
-    - [Configure and build in a single step](#configure-and-build-in-a-single-step)
-    - [Build the project with CMake (advanced)](#build-the-project-with-cmake-advanced)
-    - [Flash programming](#flash-programming)
+- [架設環境(Requirements)](#requirements) 
+- [下載CoreMaker-01檔案(Git clone)](#git-clone) 
+- [檔案編譯(Build project)](#build-project) 
 - [Recommend editor](#recommend-editor)
   - [VSCode](#vscode)
-    - [Extensions](#extensions)
-    - [VSCode configuration](#vscode-configuration)
-      - [CMake for mbed setting](#cmake-for-mbed-setting)
-      - [C/C++ intellisense](#cc-intellisense)
-      - [VSCode Tasks (Optional)](#vscode-tasks-optional)
 - [Function Test](#function-test)
   - [Wifi](#wifi)
   - [SD card](#sd-card)
@@ -85,6 +75,8 @@ Board overview
 | 7   | SPI3_CLK_mikro  | 8   | UART2_TXD_mikro |
 | 9   | SPI3_MISO_mikro | 10  | I2C0_SCL_mikro  |
 | 11  | SPI3_MOSI_mikro | 12  | I2C0_SDA_mikro  |
+| 13  | 3.3V            | 14  | 5V              |
+| 15  | GND             | 16  | GND            |
 
 * J4: USB
 
@@ -163,6 +155,16 @@ Requirements
        * Download ```NuMicro_ICP_Programming_Tool``` and install it.
   2. ARM DAPLink
      Please refer to https://os.mbed.com/docs/mbed-os/v6.15/debug-test/daplink.html
+  3. Use CMC_ISP file
+      * Download CoreMaker-01 and open CMC_ISP file
+            [(詳細內容請點此連結)](https://github.com/CoretronicMEMS/CoreMaker-01/blob/master/docs/coremaker%E6%93%8D%E4%BD%9C%E6%8C%87%E5%8D%97_V1.1.pdf) 
+
+
+
+
+* [詳細環境架設步驟](https://github.com/CoretronicMEMS/CoreMaker-01/blob/master/docs/coremaker%E6%93%8D%E4%BD%9C%E6%8C%87%E5%8D%97_V1.1.pdf)
+   * 引導您將上述架設環境內容完成
+
 
 
 ---
@@ -175,28 +177,28 @@ git clone --recurse-submodules <repo url>
 ```
 And then program with your favorite editor, like Notepad++, Sublime, VS Code, etc.
 
----
+* [詳細CoreMaker-01檔案下載步驟](https://github.com/CoretronicMEMS/CoreMaker-01/blob/master/docs/coremaker%E6%93%8D%E4%BD%9C%E6%8C%87%E5%8D%97_V1.1.pdf)
+   * 引導您將上述下載步驟完成
 
 Build project
 =============
 
-### Configure and build in a single step
+* Configure and build in a single step
 
-```
-mbed-tools compile -m AIOT2101 -t GCC_ARM
-```
+   ```
+   mbed-tools compile -m AIOT2101 -t GCC_ARM
+   ```
 
-### Build the project with CMake (advanced)
+* Build the project with CMake (advanced)
 
-```
-mbed-tools configure -t GCC_ARM -m AIOT2101
-cmake -S . -B cmake_build/AIOT2101/develop/GCC_ARM -GNinja
-cmake --build ./cmake_build/AIOT2101/develop/GCC_ARM
-```
-For more informations, please refer to https://os.mbed.com/docs/mbed-os/v6.15/build-tools/use.html
+   ```
+   mbed-tools configure -t GCC_ARM -m AIOT2101
+   cmake -S . -B cmake_build/AIOT2101/develop/GCC_ARM -GNinja
+   cmake --build ./cmake_build/AIOT2101/develop/GCC_ARM
+   ```
+   For more informations, please refer to https://os.mbed.com/docs/mbed-os/v6.15/build-tools/use.html
 
-### Flash programming
-
+* Flash programming
    * Use Nuvoton Nulink
      1. Open NuMicro_ICP_Programming_Tool
      2. Select `M480 series`
@@ -206,93 +208,106 @@ For more informations, please refer to https://os.mbed.com/docs/mbed-os/v6.15/bu
      5. Press `Start`
    * Use DAPLink
      Please refer to https://os.mbed.com/docs/mbed-os/v6.15/debug-test/daplink.html
+   * Use CMC_ISP file
+      * Download CoreMaker-01 and open CMC_ISP file
+        [(詳細內容請點此連結)](https://github.com/CoretronicMEMS/CoreMaker-01/blob/master/docs/coremaker%E6%93%8D%E4%BD%9C%E6%8C%87%E5%8D%97_V1.1.pdf) 
 
+*  [詳細檔案編譯步驟](https://github.com/CoretronicMEMS/CoreMaker-01/blob/master/docs/coremaker%E6%93%8D%E4%BD%9C%E6%8C%87%E5%8D%97_V1.1.pdf)
+   * 引導您將上述檔案編譯步驟完成
 ---
+
 
 Recommend editor
 ================
 
 ## VSCode
    https://code.visualstudio.com/
-   ### Extensions
-   * C/C++
-   * CMake
+   * ### Extensions
+      * C/C++
+      * CMake
 
-   ### VSCode configuration
+   * ### VSCode configuration
 
-   #### CMake for mbed setting
-   
-   Add `.vscode/settings.json`
-   ```json
-   "cmake.generator": "Ninja",
-   "cmake.buildDirectory": "${workspaceFolder}/cmake_build/AIOT2101/develop/GCC_ARM",
-   ```
+      * #### CMake for mbed setting
+      
+      Add `.vscode/settings.json`
+      ```json
+      "cmake.generator": "Ninja",
+      "cmake.buildDirectory": "${workspaceFolder}/cmake_build/AIOT2101/develop/GCC_ARM",
+      ```
 
-   #### C/C++ intellisense
+      * #### C/C++ intellisense
 
-   Add `.vscode/c_cpp_properties.json`
-   According to your environment to replace "compilerPath" setting.
-   ``` json
-   {
-    "configurations": [
-        {
-            "name": "CortexM",
-            "includePath": [
-                "${workspaceFolder}/**"
-            ],
-            "defines": [],
-            "cStandard": "gnu17",
-            "compilerPath": "D:\\projects\\gcc-arm-none-eabi-9-2020-q2-update-win32\\bin\\arm-none-eabi-gcc.exe",
-            "cppStandard": "gnu++14",
-            "intelliSenseMode": "linux-gcc-arm",
-            "compileCommands": "cmake_build/AIOT2101/develop/GCC_ARM/compile_commands.json",
-            "configurationProvider": "ms-vscode.cmake-tools"
-        }
-    ],
-    "version": 4
-   }
-   ```
-
-   #### VSCode Tasks (Optional)
-
-   Add `.vscode/tasks.json`
-   ```json
-   "tasks": [
+      Add `.vscode/c_cpp_properties.json`
+      According to your environment to replace "compilerPath" setting.
+      ``` json
       {
-         "type": "shell",
-         "label": "CMake Build",
-         "command": "cmake.exe",
-         "args": [
-               "--build",
-               "cmake_build/AIOT2101/develop/GCC_ARM/"
-         ],
-         "problemMatcher": [
-               "$gcc"
-         ],
-         "group": {
-               "kind": "build",
-               "isDefault": true
-         },
-         "detail": "編譯器: cmake"
+      "configurations": [
+         {
+               "name": "CortexM",
+               "includePath": [
+                  "${workspaceFolder}/**"
+               ],
+               "defines": [],
+               "cStandard": "gnu17",
+               "compilerPath": "D:\\projects\\gcc-arm-none-eabi-9-2020-q2-update-win32\\bin\\arm-none-eabi-gcc.exe",
+               "cppStandard": "gnu++14",
+               "intelliSenseMode": "linux-gcc-arm",
+               "compileCommands": "cmake_build/AIOT2101/develop/GCC_ARM/compile_commands.json",
+               "configurationProvider": "ms-vscode.cmake-tools"
+         }
+      ],
+      "version": 4
       }
-   ]
-   ```
+      ```
+
+      * #### VSCode Tasks (Optional)
+
+      Add `.vscode/tasks.json`
+      ```json
+      "tasks": [
+         {
+            "type": "shell",
+            "label": "CMake Build",
+            "command": "cmake.exe",
+            "args": [
+                  "--build",
+                  "cmake_build/AIOT2101/develop/GCC_ARM/"
+            ],
+            "problemMatcher": [
+                  "$gcc"
+            ],
+            "group": {
+                  "kind": "build",
+                  "isDefault": true
+            },
+            "detail": "編譯器: cmake"
+         }
+      ]
+     ```
+
+* ### [詳細Visual Studio Code 編譯環境設定步驟](https://github.com/CoretronicMEMS/CoreMaker-01/blob/master/docs/CoreMaker-01%20Visual%20Studio%20Code%20%E7%B7%A8%E8%AD%AF%E7%92%B0%E5%A2%83%E8%A8%AD%E5%AE%9A%E8%AA%AA%E6%98%8E.pdf)
+   *  引導您將上述Visual Studio Code 編譯環境設定內容完成
 
 ---
 
 Function Test
 ================
 
-## Wifi
+## WiFi
   1. Open the netassist application and start the tcp server
   2. Modify the main.cpp string to wifi_example.cpp string in CMakeLists.txt
   2. Modify the settings of wifi-ssid and wifi-password in mbed_app.json according to the router settings
   3. Convert the IP address and port on line 60 in wifi_example.cpp into the IP address and port of the tcp server
   4. Re-build image and burn image to pcb board
   5. After waiting for a period of time, confirm whether the tcp server has received the data, if so, the function is normal
+  * [WIFI 運行指南](https://github.com/CoretronicMEMS/CoreMaker-01/blob/master/docs/CoreMaker-01%20wifi%20%E9%81%8B%E8%A1%8C%E6%8C%87%E5%8D%97.pdf)
 
-## SD card
+
+## SD Card
   1. Prepare a sdcard with fat32 format and plug into pcb board
   2. Modify the main.cpp string to sdcard_example.cpp string in CMakeLists.txt
   2. Re-build image and burn image to pcb board
   3. Check whether there is a file numbers.txt in the sdcard, and the content is a number from 0 to 9. If so, the sdcard function is normal
+  * [SD Card 運行指南](https://github.com/frank1201/CoreMaker-01/blob/master/docs/CoreMaker-01%20Sd%20card%E9%81%8B%E8%A1%8C%E6%8C%87%E5%8D%97.pdf)
+  
