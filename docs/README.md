@@ -19,4 +19,4 @@ CoreMaker-01 document
     - [SPU0410LR5H-QB 聲音感知器](https://media.digikey.com/pdf/Data%20Sheets/Knowles%20Acoustics%20PDFs/SPU0410LR5H-QB_RevH_3-27-13.pdf)
 - [Board overview](https://github.com/CoretronicMEMS/CoreMaker-01/blob/master/docs/board_top_view.png)
 
-- [CoreMaker-01電路圖](https://github.com/CoretronicMEMS/CoreMaker-01/blob/master/docs/Schematic_coremaker-01_V1(211213).pdf)
+- [CoreMaker-01電路圖](https://github.com/frank1201/CoreMaker-01/blob/master/docs/coremaker-01_V1.1(220216).pdf)
