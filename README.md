@@ -171,8 +171,7 @@ git clone --recurse-submodules <repo url>
 And then program with your favorite editor, like Notepad++, Sublime, VS Code, etc.
 
 * [下載步驟](https://github.com/CoretronicMEMS/CoreMaker-01/blob/master/docs/coremaker%E6%93%8D%E4%BD%9C%E6%8C%87%E5%8D%97_V1.1.pdf)
-   *引導您將上述下載步驟玩成
----
+   * 引導您將上述下載步驟玩成
 
 Build project
 =============
@@ -183,16 +182,16 @@ Build project
    mbed-tools compile -m AIOT2101 -t GCC_ARM
    ```
 
-### Build the project with CMake (advanced)
+* Build the project with CMake (advanced)
 
-```
-mbed-tools configure -t GCC_ARM -m AIOT2101
-cmake -S . -B cmake_build/AIOT2101/develop/GCC_ARM -GNinja
-cmake --build ./cmake_build/AIOT2101/develop/GCC_ARM
-```
-For more informations, please refer to https://os.mbed.com/docs/mbed-os/v6.15/build-tools/use.html
+   ```
+   mbed-tools configure -t GCC_ARM -m AIOT2101
+   cmake -S . -B cmake_build/AIOT2101/develop/GCC_ARM -GNinja
+   cmake --build ./cmake_build/AIOT2101/develop/GCC_ARM
+   ```
+   For more informations, please refer to https://os.mbed.com/docs/mbed-os/v6.15/build-tools/use.html
 
-
+---
 
 
 Recommend editor
@@ -200,7 +199,7 @@ Recommend editor
 
 ## VSCode
    https://code.visualstudio.com/
-   ### Extensions
+   * ### Extensions
    * C/C++
    * CMake
 
