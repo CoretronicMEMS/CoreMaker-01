@@ -165,10 +165,11 @@ Requirements
 Git clone
 =========
 
-*  ```
-  git clone --recurse-submodules <repo url>
-  ```
-  And then program with your favorite editor, like Notepad++, Sublime, VS Code, etc.
+```
+git clone --recurse-submodules <repo url>
+```
+And then program with your favorite editor, like Notepad++, Sublime, VS Code, etc.
+
 * [下載步驟](https://github.com/CoretronicMEMS/CoreMaker-01/blob/master/docs/coremaker%E6%93%8D%E4%BD%9C%E6%8C%87%E5%8D%97_V1.1.pdf)
    *引導您將上述下載步驟玩成
 ---
