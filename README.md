@@ -200,68 +200,68 @@ Recommend editor
 ## VSCode
    https://code.visualstudio.com/
    * ### Extensions
-   * C/C++
-   * CMake
+      * C/C++
+      * CMake
 
-   ### VSCode configuration
+   * ### VSCode configuration
 
-   #### CMake for mbed setting
-   
-   Add `.vscode/settings.json`
-   ```json
-   "cmake.generator": "Ninja",
-   "cmake.buildDirectory": "${workspaceFolder}/cmake_build/AIOT2101/develop/GCC_ARM",
-   ```
+      * #### CMake for mbed setting
+      
+      Add `.vscode/settings.json`
+      ```json
+      "cmake.generator": "Ninja",
+      "cmake.buildDirectory": "${workspaceFolder}/cmake_build/AIOT2101/develop/GCC_ARM",
+      ```
 
-   #### C/C++ intellisense
+      * #### C/C++ intellisense
 
-   Add `.vscode/c_cpp_properties.json`
-   According to your environment to replace "compilerPath" setting.
-   ``` json
-   {
-    "configurations": [
-        {
-            "name": "CortexM",
-            "includePath": [
-                "${workspaceFolder}/**"
-            ],
-            "defines": [],
-            "cStandard": "gnu17",
-            "compilerPath": "D:\\projects\\gcc-arm-none-eabi-9-2020-q2-update-win32\\bin\\arm-none-eabi-gcc.exe",
-            "cppStandard": "gnu++14",
-            "intelliSenseMode": "linux-gcc-arm",
-            "compileCommands": "cmake_build/AIOT2101/develop/GCC_ARM/compile_commands.json",
-            "configurationProvider": "ms-vscode.cmake-tools"
-        }
-    ],
-    "version": 4
-   }
-   ```
-
-   #### VSCode Tasks (Optional)
-
-   Add `.vscode/tasks.json`
-   ```json
-   "tasks": [
+      Add `.vscode/c_cpp_properties.json`
+      According to your environment to replace "compilerPath" setting.
+      ``` json
       {
-         "type": "shell",
-         "label": "CMake Build",
-         "command": "cmake.exe",
-         "args": [
-               "--build",
-               "cmake_build/AIOT2101/develop/GCC_ARM/"
-         ],
-         "problemMatcher": [
-               "$gcc"
-         ],
-         "group": {
-               "kind": "build",
-               "isDefault": true
-         },
-         "detail": "編譯器: cmake"
+      "configurations": [
+         {
+               "name": "CortexM",
+               "includePath": [
+                  "${workspaceFolder}/**"
+               ],
+               "defines": [],
+               "cStandard": "gnu17",
+               "compilerPath": "D:\\projects\\gcc-arm-none-eabi-9-2020-q2-update-win32\\bin\\arm-none-eabi-gcc.exe",
+               "cppStandard": "gnu++14",
+               "intelliSenseMode": "linux-gcc-arm",
+               "compileCommands": "cmake_build/AIOT2101/develop/GCC_ARM/compile_commands.json",
+               "configurationProvider": "ms-vscode.cmake-tools"
+         }
+      ],
+      "version": 4
       }
-   ]
-   ```
+      ```
+
+      * #### VSCode Tasks (Optional)
+
+      Add `.vscode/tasks.json`
+      ```json
+      "tasks": [
+         {
+            "type": "shell",
+            "label": "CMake Build",
+            "command": "cmake.exe",
+            "args": [
+                  "--build",
+                  "cmake_build/AIOT2101/develop/GCC_ARM/"
+            ],
+            "problemMatcher": [
+                  "$gcc"
+            ],
+            "group": {
+                  "kind": "build",
+                  "isDefault": true
+            },
+            "detail": "編譯器: cmake"
+         }
+      ]
+      ```
 
 ---
 
