@@ -2,7 +2,7 @@
 CoreMaker-01 document
 =====================
 
-- [CoreMaker-01 操作指南:環境設定、下載及編譯原始碼、加入AI](https://github.com/CoretronicMEMS/CoreMaker-01/blob/master/docs/coremaker%E6%93%8D%E4%BD%9C%E6%8C%87%E5%8D%97_V1.1.pdf)
+- [CoreMaker-01_V1.1 操作指南:環境設定、下載及編譯原始碼、加入AI](https://github.com/CoretronicMEMS/CoreMaker-01/blob/master/docs/coremaker%E6%93%8D%E4%BD%9C%E6%8C%87%E5%8D%97_V1.1.pdf)
 - 範例程式
     - [WiFi 運行指南](https://github.com/CoretronicMEMS/CoreMaker-01/blob/master/docs/CoreMaker-01%20wifi%20%E9%81%8B%E8%A1%8C%E6%8C%87%E5%8D%97.pdf)
     - [SD Card 運行指南](https://github.com/CoretronicMEMS/CoreMaker-01/blob/master/docs/CoreMaker-01%20Sd%20card%E9%81%8B%E8%A1%8C%E6%8C%87%E5%8D%97.pdf)
