@@ -23,4 +23,7 @@ CoreMaker-01 document
     - [CoreMaker-01_V1.1](https://github.com/CoretronicMEMS/CoreMaker-01/blob/master/docs/coremaker-01_V1.1(220216).pdf)
     - [CoreMaker-01_V1](https://github.com/CoretronicMEMS/CoreMaker-01/blob/master/docs/Schematic_coremaker-01_V1(211213).pdf)
 - 應用指南
-    - [CoreMaker-01_V1.1電源供應模式](https://github.com/CoreMaker-01/blob/master/docs/coremaker-01_V1.1%E9%9B%BB%E6%BA%90%E4%BE%9B%E6%87%89%E6%A8%A1%E5%BC%8F.pdf)
+    - [CoreMaker-01_V1.1電源供應模式](https://github.com/CoretronicMEMS/CoreMaker-01/blob/master/docs/coremaker-01_V1.1%E9%9B%BB%E6%BA%90%E4%BE%9B%E6%87%89%E6%A8%A1%E5%BC%8F.pdf)
+    - [CoreMaker-01_V1.1 PWM控制LED和風扇](https://github.com/CoreMaker-01/blob/master/docs/CoreMaker-01_V1.1%20PWM_LED.pdf)
+- [Github 指南](https://github.com/CoreMaker-01/blob/master/docs/CoreMaker-01%20github.pdf)
+    - 引導您在Github上的操作(Fork、更新資料、上傳文件等)
