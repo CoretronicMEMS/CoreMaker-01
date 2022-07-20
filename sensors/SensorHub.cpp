@@ -115,7 +115,7 @@ namespace CMC
             }
 
             m_SensorSel = sensorId;
-            if(sensorId >0 && sensorId <SENSOR_MAX)
+            if(sensorId >= 0 && sensorId <SENSOR_MAX)
             {
                 DBG_MSG("Sensor select %d: %s\n", m_SensorSel, sensors[m_SensorSel]->Name());
             }
