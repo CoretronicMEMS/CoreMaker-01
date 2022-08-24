@@ -25,5 +25,8 @@ CoreMaker-01 document
 - 應用指南
     - [CoreMaker-01_V1.1電源供應模式](https://github.com/CoretronicMEMS/CoreMaker-01/blob/master/docs/coremaker-01_V1.1%E9%9B%BB%E6%BA%90%E4%BE%9B%E6%87%89%E6%A8%A1%E5%BC%8F.pdf)
     - [CoreMaker-01_V1.1 PWM控制LED和風扇](https://github.com/CoreMaker-01/blob/master/docs/CoreMaker-01_V1.1%20PWM_LED.pdf)
+    - CoreMaker-01_V1.1 I2C使用範例:AHT10 Sensor
+    - CoreMaker-01_V1.1 GPIO使用範例:步進馬達 28BYJ-48 模組
+    - CoreMaker-01_V1.1 外接感知器連接SensiML平台
 - [Github 指南](https://github.com/CoreMaker-01/blob/master/docs/CoreMaker-01%20github.pdf)
     - 引導您在Github上的操作(Fork、更新資料、上傳文件等)
