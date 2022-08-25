@@ -10,7 +10,7 @@ CoreMaker-01 document
         * 修改程式碼，改變在CoreMakerg-01上的燈效，以控制LED綠燈為範例。
     - [Visual Studio Code 編譯環境設定說明](https://github.com/CoretronicMEMS/CoreMaker-01/blob/master/docs/CoreMaker-01%20Visual%20Studio%20Code%20%E7%B7%A8%E8%AD%AF%E7%92%B0%E5%A2%83%E8%A8%AD%E5%AE%9A%E8%AA%AA%E6%98%8E.pdf)
         * 上述文件程式編譯都在命令提示字元進行編譯，此文件將說明如何在Visual Studio Code進行編譯。
-    - [切換感知器](https://github.com/CoretronicMEMS/CoreMaker-01/blob/master/docs/Kx122(%E5%8A%A0%E9%80%9F%E5%BA%A6)%E6%84%9F%E7%9F%A5%E5%99%A8%E8%A8%93%E7%B7%B4AI%E6%A8%A1%E7%B5%84.pdf)
+    - [切換感知器](https://github.com/CoretronicMEMS/CoreMaker-01/blob/master/docs/CoreMaker-01%20%E5%88%87%E6%8F%9B%E6%84%9F%E7%9F%A5%E5%99%A8.pdf)
         * 因預設聲音感知器為為程式內部AI選項，如要切換在CoreMaker-01上的感知器，並加入AI訓練，需得修改程式碼。此文件以切換到加速度感知器舉例說明。
 - Sensor Datasheet
     - [KX122-103 加速度感知器](https://github.com/CoretronicMEMS/CoreMaker-01/blob/master/docs/KX122-1037-Specifications-Rev-6.0.pdf)
@@ -23,10 +23,10 @@ CoreMaker-01 document
     - [CoreMaker-01_V1.1](https://github.com/CoretronicMEMS/CoreMaker-01/blob/master/docs/coremaker-01_V1.1(220216).pdf)
     - [CoreMaker-01_V1](https://github.com/CoretronicMEMS/CoreMaker-01/blob/master/docs/Schematic_coremaker-01_V1(211213).pdf)
 - 應用指南
-    - [CoreMaker-01_V1.1電源供應模式](https://github.com/CoretronicMEMS/CoreMaker-01/blob/master/docs/coremaker-01_V1.1%E9%9B%BB%E6%BA%90%E4%BE%9B%E6%87%89%E6%A8%A1%E5%BC%8F.pdf)
-    - [CoreMaker-01_V1.1 PWM控制LED和風扇](https://github.com/CoreMaker-01/blob/master/docs/CoreMaker-01_V1.1%20PWM_LED.pdf)
-    - CoreMaker-01_V1.1 I2C使用範例:AHT10 Sensor
-    - CoreMaker-01_V1.1 GPIO使用範例:步進馬達 28BYJ-48 模組
-    - CoreMaker-01_V1.1 外接感知器連接SensiML平台
-- [Github 指南](https://github.com/CoreMaker-01/blob/master/docs/CoreMaker-01%20github.pdf)
+    - [CoreMaker-01_V1.1電源供應模式](https://github.com/CoretronicMEMS/CoreMaker-01/blob/master/docs/coremaker-01%E9%9B%BB%E6%BA%90%E4%BE%9B%E6%87%89%E6%A8%A1%E5%BC%8F.pdf)
+    - [CoreMaker-01_V1.1 PWM控制LED和風扇](https://github.com/CoretronicMEMS/CoreMaker-01/blob/master/docs/CoreMaker-01_V1.1%20PWM_LED.pdf)
+    - [CoreMaker-01_V1.1 I2C使用範例:AHT10 Sensor](https://github.com/CoretronicMEMS/CoreMaker-01/blob/master/docs/CoreMaker%20i2c%20%E7%AF%84%E4%BE%8B.pdf)
+    - [CoreMaker-01_V1.1 GPIO使用範例:步進馬達 28BYJ-48 模組](https://github.com/CoretronicMEMS/CoreMaker-01/blob/master/docs/CoreMaker-01%20%20%E5%AE%9A%E7%BE%A9GPIO%E4%BD%BF%E7%94%A8%E7%AF%84%E4%BE%8B%E6%AD%A5%E9%80%B2%E9%A6%AC%E9%81%94.pdf)
+    - [CoreMaker-01_V1.1 外接感知器連接SensiML平台](https://github.com/CoretronicMEMS/CoreMaker-01/blob/master/docs/CoreMaker-01%20%E5%A4%96%E6%8E%A5sensor%E8%87%B3AI.pdf)
+- [Github 指南](https://github.com/CoretronicMEMS/CoreMaker-01/blob/master/docs/CoreMaker-01%20github.pdf)
     - 引導您在Github上的操作(Fork、更新資料、上傳文件等)
