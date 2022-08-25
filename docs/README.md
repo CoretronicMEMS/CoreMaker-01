@@ -25,9 +25,12 @@ CoreMaker-01 document
 - 應用指南
     - [CoreMaker-01_V1.1電源供應模式](https://github.com/CoretronicMEMS/CoreMaker-01/blob/master/docs/coremaker-01%E9%9B%BB%E6%BA%90%E4%BE%9B%E6%87%89%E6%A8%A1%E5%BC%8F.pdf)
     - [CoreMaker-01_V1.1 PWM控制LED和風扇](https://github.com/CoretronicMEMS/CoreMaker-01/blob/master/docs/CoreMaker-01_V1.1%20PWM_LED.pdf)
-        * [PWM_LED_sample_code](https://github.com/frank1201/CoreMaker-01/tree/master/docs/SDK/PWM_sample%20code)
+        * [PWM_LED_sample_code](https://github.com/CoretronicMEMS/CoreMaker-01/tree/master/docs/SDK/PWM_sample%20code)
     - [CoreMaker-01_V1.1 I2C使用範例:AHT10 Sensor](https://github.com/CoretronicMEMS/CoreMaker-01/blob/master/docs/CoreMaker%20i2c%20%E7%AF%84%E4%BE%8B.pdf)
+        * [I2C_AHT10sensor_sample_code](https://github.com/CoretronicMEMS/CoreMaker-01/tree/master/docs/SDK/I2C_AHT10_sample%20code)
     - [CoreMaker-01_V1.1 GPIO使用範例:步進馬達 28BYJ-48 模組](https://github.com/CoretronicMEMS/CoreMaker-01/blob/master/docs/CoreMaker-01%20%20%E5%AE%9A%E7%BE%A9GPIO%E4%BD%BF%E7%94%A8%E7%AF%84%E4%BE%8B%E6%AD%A5%E9%80%B2%E9%A6%AC%E9%81%94.pdf)
+        * [GPIO_motor_sample_code](https://github.com/CoretronicMEMS/CoreMaker-01/tree/master/docs/SDK/GPIO_motor%20sample%20code)
     - [CoreMaker-01_V1.1 外接感知器連接SensiML平台](https://github.com/CoretronicMEMS/CoreMaker-01/blob/master/docs/CoreMaker-01%20%E5%A4%96%E6%8E%A5sensor%E8%87%B3AI.pdf)
+        * [Sensor_SensiML_sample_code](https://github.com/CoretronicMEMS/CoreMaker-01/tree/master/docs/SDK/Sensor_Sensiml_sample%20code)
 - [Github 指南](https://github.com/CoretronicMEMS/CoreMaker-01/blob/master/docs/CoreMaker-01%20github.pdf)
     - 引導您在Github上的操作(Fork、更新資料、上傳文件等)
