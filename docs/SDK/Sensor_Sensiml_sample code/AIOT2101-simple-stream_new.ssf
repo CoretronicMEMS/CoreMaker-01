@@ -126,23 +126,27 @@
                 }
             ]
         },
-        {
-            "name": "Airquality",
-            "part": "SGP30",
+         {
+            "name": "Compass",
+            "part": "GMC306",
             "sample_rates": [
-                1
+                200,
+                100,
+                50,
+                20,
+                10
             ],
             "sensors": [
                 {
-                    "column_count": 1,
-                    "type": "Eco2",
-                    "is_default": true
-                },
-	    {
-	        "column_count": 1,
-                    "type": "Tvo2",
-                    "is_default": true
-	    },
+                    "type": "Magnet",
+                    "is_default": true,
+                    "column_count": 3,
+                    "column_suffixes": [
+                        "X",
+                        "Y",
+                        "Z"
+                    ]
+                }
             ]
         },
         {
@@ -169,6 +173,25 @@
                     "type": "Pressure",
                     "is_default": true
                 }
+            ]
+        },	
+        {
+            "name": "Airquality",
+            "part": "SGP30",
+            "sample_rates": [
+                1
+            ],
+            "sensors": [
+                {
+                    "column_count": 1,
+                    "type": "Eco2",
+                    "is_default": true
+                },
+	            {
+	                "column_count": 1,
+                    "type": "Tvo2",
+                    "is_default": true
+	            }
             ]
         }
     ]
