@@ -7,3 +7,4 @@ Introduce
 - Sensorhub : 範例程式
     * [SensorHub.cpp](./SensorHub(sgp30).cpp)
     * [SensorHub.h](./SensorHub(sgp30).h)
+ - [外接感知器至SensiML平台](../../CoreMaker-01%20外接sensor至AI.pdf)
