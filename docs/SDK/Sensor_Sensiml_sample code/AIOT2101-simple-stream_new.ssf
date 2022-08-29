@@ -1,0 +1,198 @@
+{
+    "uuid": "1641a489-9090-4941-840b-07c8d0d17d4c",
+    "device_name": "CoreMaker-01",
+    "device_manufacturer": "CoretronicMEMS",
+    "plugin_developer": "CoretronicMEMS",
+    "is_little_endian": true,
+    "firmware_download_links": [
+        {
+          "title": "Data Collection Firmware",
+          "description": "",
+          "link": "https://github.com/CoretronicMEMS/"
+        }
+    ],
+    "documentation_links": [
+        {
+          "title": "SensiML Getting Started Guide",
+          "description": "",
+          "link": "https://github.com/CoretronicMEMS/"
+        }
+    ],
+    "collection_methods": [
+        {
+            "name": "live",
+            "display_name": "Live Stream Capture",
+            "is_default": true
+        }
+    ],
+    "device_connections": [
+        {
+            "display_name": "Serial Port",
+            "value": 1,
+            "is_default": true,
+            "serial_port_configuration": {
+                "baud": 921600,
+                "stop_bits": 1,
+                "parity": 0,
+                "handshake": 0,
+                "max_live_sample_rate": 1000
+            }
+        },
+        {
+            "display_name": "Wi-Fi",
+            "value": 2,
+            "is_default": false,
+            "wifi_configuration": {
+                "max_live_sample_rate": 1000000
+            }
+        }
+    ],
+    "capture_sources": [
+        {
+            "name": "Audio",
+            "part": "Default",
+            "sample_rates": [
+                16000,
+                8000,
+                4000,
+                2000,
+                1000,
+                400,
+                200,
+                100
+            ],
+            "sensors": [
+                {
+                    "column_count": 1,
+                    "type": "Microphone",
+                    "is_default": true
+                }
+            ]
+        },
+        {
+            "name": "Environment",
+            "part": "BME680",
+            "sample_rates": [
+                1
+            ],
+            "sensors": [
+                {
+                    "column_count": 1,
+                    "type": "Temperature",
+                    "is_default": true
+                },
+                {
+                    "column_count": 1,
+                    "type": "Pressure",
+                    "is_default": true
+                },
+                {
+                    "column_count": 1,
+                    "type": "Humidity",
+                    "is_default": true
+                },
+                {
+                    "column_count": 1,
+                    "type": "Gas resistance",
+                    "is_default": true
+                }
+            ]
+        },
+        {
+            "name": "Motion",
+            "part": "KX122-1037",
+            "sample_rates": [
+                12800,
+                6400,
+                3200,
+                1600,
+                800,
+                400,
+                200,
+                100,
+                50,
+                25
+            ],
+            "sensors": [
+                {
+                    "type": "Accelerometer",
+                    "is_default": true,
+                    "column_count": 3,
+                    "column_suffixes": [
+                        "X",
+                        "Y",
+                        "Z"
+                    ]
+                }
+            ]
+        },
+         {
+            "name": "Compass",
+            "part": "GMC306",
+            "sample_rates": [
+                200,
+                100,
+                50,
+                20,
+                10
+            ],
+            "sensors": [
+                {
+                    "type": "Magnet",
+                    "is_default": true,
+                    "column_count": 3,
+                    "column_suffixes": [
+                        "X",
+                        "Y",
+                        "Z"
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Pressure",
+            "part": "GMP102",
+            "sample_rates": [
+                32768,
+	    16384,
+                8192,
+                4096,
+                2048,
+                1024,
+                512,
+                256
+            ],
+            "sensors": [
+                {
+                    "column_count": 1,
+                    "type": "Temperature",
+                    "is_default": true
+                },
+                {
+                    "column_count": 1,
+                    "type": "Pressure",
+                    "is_default": true
+                }
+            ]
+        },	
+        {
+            "name": "Airquality",
+            "part": "SGP30",
+            "sample_rates": [
+                1
+            ],
+            "sensors": [
+                {
+                    "column_count": 1,
+                    "type": "Eco2",
+                    "is_default": true
+                },
+	            {
+	                "column_count": 1,
+                    "type": "Tvo2",
+                    "is_default": true
+	            }
+            ]
+        }
+    ]
+}
